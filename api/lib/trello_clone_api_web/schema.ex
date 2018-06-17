@@ -7,7 +7,6 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:id, non_null(:id))
     field(:username, non_null(:string))
     field(:email, non_null(:string))
-    field(:password, non_null(:string))
   end
 
   query do
