@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+.log
+.sql
+.sass-cache/
+.codekit-config.json
+
+.vagrant/*
+vagrant.d/.vagrant/*
+*.log
+/deps
+/_build
+
+node_modules/
