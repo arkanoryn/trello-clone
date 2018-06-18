@@ -6,8 +6,12 @@ defmodule TrelloCloneApi.AccountsTest do
   describe "users" do
     alias TrelloCloneApi.Accounts.User
 
-    @valid_attrs %{email: "some email", password: "some password", username: "some username"}
-    @update_attrs %{email: "some updated email", password: "some updated password", username: "some updated username"}
+    @valid_attrs %{email: "some@email.com", password: "some password", username: "username"}
+    @update_attrs %{
+      email: "some updated email",
+      password: "some updated password",
+      username: "some updated username"
+    }
     @invalid_attrs %{email: nil, password: nil, username: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -31,9 +35,25 @@ defmodule TrelloCloneApi.AccountsTest do
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
-      assert user.email == "some email"
+      assert user.email == "some@email.com"
       assert user.password == "some password"
-      assert user.username == "some username"
+      assert user.username == "username"
+    end
+
+    require IEx
+
+    test "create_user/1 with used username returns an error" do
+      {:ok, %User{} = _first_user} = Accounts.create_user(@valid_attrs)
+      assert {:error, changeset} = Accounts.create_user(@valid_attrs)
+      assert changeset.errors === [username: {"has already been taken", []}]
+    end
+
+    test "create_user/1 with used email returns an error" do
+      {:ok, %User{} = _first_user} =
+        Accounts.create_user(%{@valid_attrs | username: "Jean Dupont"})
+
+      assert {:error, changeset} = Accounts.create_user(@valid_attrs)
+      assert changeset.errors === [email: {"has already been taken", []}]
     end
 
     test "create_user/1 with invalid data returns error changeset" do
