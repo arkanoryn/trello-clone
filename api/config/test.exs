@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :trello_clone_api, TrelloCloneApi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  # username: "postgres",
+  # password: "postgres",
   database: "trello_clone_api_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

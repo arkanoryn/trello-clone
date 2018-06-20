@@ -1,6 +1,4 @@
-require IEx
-
-defmodule TrelloCloneApiWeb.NoteResolverTest do
+defmodule TrelloCloneApiWeb.AccountsResolverTest do
   use TrelloCloneApiWeb.ConnCase
   alias TrelloCloneApiWeb.AbsintheHelpers
 

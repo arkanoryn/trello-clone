@@ -20,7 +20,10 @@ defmodule TrelloCloneApi.Mixfile do
   def application do
     [
       mod: {TrelloCloneApi.Application, []},
-      extra_applications: [:logger, :runtime_tools, :absinthe_plug]
+      extra_applications: [
+        :logger,
+        :runtime_tools, :absinthe_plug
+      ]
     ]
   end
 
@@ -43,7 +46,10 @@ defmodule TrelloCloneApi.Mixfile do
       {:absinthe_ecto, "~> 0.1.0"},
       {:cowboy, "~> 1.0"},
       {:absinthe_plug, "~> 1.4"},
-      {:poison, "~> 3.1.0"}
+      {:poison, "~> 3.1.0"},
+      {:ex_unit_notifier, "~> 0.1", only: :test},
+      {:mix_test_watch, "~> 0.6", only: :dev, runtime: false},
+      {:faker, "~> 0.10", only: :test}
     ]
   end
 

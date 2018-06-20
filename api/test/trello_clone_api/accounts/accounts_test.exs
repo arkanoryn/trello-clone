@@ -40,20 +40,18 @@ defmodule TrelloCloneApi.AccountsTest do
       assert user.username == "username"
     end
 
-    require IEx
-
     test "create_user/1 with used username returns an error" do
-      {:ok, %User{} = _first_user} = Accounts.create_user(@valid_attrs)
-      assert {:error, changeset} = Accounts.create_user(@valid_attrs)
-      assert changeset.errors === [username: {"has already been taken", []}]
+      {:ok, %User{} = _user} = Accounts.create_user(@valid_attrs)
+      {:error, changeset} = Accounts.create_user(@valid_attrs)
+      refute changeset.valid?
     end
 
     test "create_user/1 with used email returns an error" do
-      {:ok, %User{} = _first_user} =
-        Accounts.create_user(%{@valid_attrs | username: "Jean Dupont"})
+      {:ok, %User{} = _user} = Accounts.create_user(%{@valid_attrs | username: "Jean Dupont"})
 
-      assert {:error, changeset} = Accounts.create_user(@valid_attrs)
-      assert changeset.errors === [email: {"has already been taken", []}]
+      {:error, changeset} = Accounts.create_user(@valid_attrs)
+      refute changeset.valid?
+      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "create_user/1 with invalid data returns error changeset" do

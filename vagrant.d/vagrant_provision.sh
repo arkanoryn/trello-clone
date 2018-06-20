@@ -1,6 +1,6 @@
 #!/bin/sh
 
-ERLANG_VERSION=19.2
+ERLANG_VERSION=20.3
 ELIXIR_VERSION=1.6.5
 NODE_VERSION=6
 
@@ -78,10 +78,13 @@ mix archive.install https://github.com/phoenixframework/archives/raw/master/phx_
 # Install zsh
 sudo apt-add-repository ppa:fish-shell/release-2
 sudo apt-get update
-sudo apt-get install fish
+sudo apt install fish
 
 # Set zsh as default shell
-sudo hsh -s /usr/bin/fish ubuntu
+sudo csh -s /usr/bin/fish ubuntu
+
+sudo apt-get install -y -q inotify-tools
+
 
 # If seeds.exs exists we assume it is a Phoenix project
 if [ -f /vagrant/priv/repo/seeds.exs ]
