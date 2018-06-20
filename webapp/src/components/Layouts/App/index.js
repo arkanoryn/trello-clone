@@ -26,7 +26,7 @@ const AppLayout = ({ children }) => (
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
 
-      <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
+      <div style={{ padding: 24, minHeight: 380 }}>
         {children}
       </div>
     </Content>

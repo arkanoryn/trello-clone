@@ -1,1 +1,11 @@
-@import '~antd/dist/antd.css';
+.project-card {
+  border-radius: 5px !important;
+}
+
+.project-card > .ant-card-body {
+  border-radius: 0 0 5px 5px;
+}
+
+.project-card > .ant-card-head {
+  border-radius: 5px 5px 0 0;
+}
