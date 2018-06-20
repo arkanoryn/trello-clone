@@ -1,11 +1,9 @@
 import React from 'react';
 
 import { Layout, Menu, Breadcrumb } from 'antd';
-import Project from '../../Projects/';
-
 const { Header, Content, Footer } = Layout;
 
-const AppLayout = () => (
+const AppLayout = ({ children }) => (
   <Layout>
     <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
       <div className="logo" />
@@ -27,9 +25,9 @@ const AppLayout = () => (
         <Breadcrumb.Item>List</Breadcrumb.Item>
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
-      
+
       <div style={{ background: '#fff', padding: 24, minHeight: 380 }}>
-        <Project.NewProjectForm />
+        {children}
       </div>
     </Content>
 
