@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Icon, Avatar } from 'antd';
+import { Card, Icon, Avatar, Tooltip } from 'antd';
 
 const { Meta } = Card;
 
@@ -29,10 +29,12 @@ const ProjectTile = ({
       extra={<Icon type="ellipsis" />}
       style={{ height: 200, textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflow: 'hidden' }}
     >
-      <Meta
-        description={description}
-        onClick={() => { return goToProject(id); }}
-      />
+      <Tooltip title={description}>
+        <Meta
+          description={description}
+          onClick={() => { return goToProject(id); }}
+        />
+      </Tooltip>
     </Card >
   );
 };
