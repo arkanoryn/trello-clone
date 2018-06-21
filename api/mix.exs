@@ -22,7 +22,8 @@ defmodule TrelloCloneApi.Mixfile do
       mod: {TrelloCloneApi.Application, []},
       extra_applications: [
         :logger,
-        :runtime_tools, :absinthe_plug
+        :runtime_tools,
+        :absinthe_plug
       ]
     ]
   end
@@ -37,6 +38,7 @@ defmodule TrelloCloneApi.Mixfile do
   defp deps do
     [
       {:phoenix, "~> 1.3.3"},
+      {:cors_plug, "~> 1.5"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_ecto, "~> 3.2"},
       {:postgrex, ">= 0.0.0"},

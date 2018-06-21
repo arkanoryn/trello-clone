@@ -5,9 +5,11 @@ defmodule TrelloCloneApiWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/api", TrelloCloneApiWeb do
-    pipe_through(:api)
-  end
+  # scope "/api", TrelloCloneApiWeb do
+  #   pipe_through(:api)
+  # end
+
+  forward("/api", Absinthe.Plug, schema: TrelloCloneApiWeb.Schema)
 
   forward(
     "/graphiql",

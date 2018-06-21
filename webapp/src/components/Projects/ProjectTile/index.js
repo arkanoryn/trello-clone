@@ -27,6 +27,7 @@ const ProjectTile = ({
       bordered={false}
       title={<div><Avatar src={image || DEFAULT_COVER} /> {name}</div>}
       extra={<Icon type="ellipsis" />}
+      style={{ height: 200, textOverflow: 'ellipsis', whiteSpace: 'pre-line', overflow: 'hidden' }}
     >
       <Meta
         description={description}
