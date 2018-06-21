@@ -1,5 +1,8 @@
 import ProjectsPage from './projects';
 
+const tmp = '';
+
 export {
-  ProjectsPage
+  ProjectsPage,
+  tmp,
 };

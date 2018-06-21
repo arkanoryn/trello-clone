@@ -1,7 +1,7 @@
 import NewProject from './NewProject/';
 
 const exporter = {
-    ...NewProject,
-}
+  ...NewProject,
+};
 
 export default exporter;
