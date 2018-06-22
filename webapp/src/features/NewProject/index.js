@@ -1,75 +1,60 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push as pushAction } from 'connected-react-router';
-import { withRouter } from 'react-router-dom';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { graphql } from 'react-apollo';
+import { compose, withHandlers } from 'recompose';
 import { Col, Row, Card, notification } from 'antd';
 
 import { NewProjectForm } from '../../components';
-
-const mutation = gql`
-  mutation createProject($name: String!, $description: String!) {
-    createProject(name: $name, description: $description) {
-      id
-      name
-      description
-    }
-  }
-`;
-
-const submitSuccessful = (push) => {
-  // TODO: add a notification success?
-  push('/projects');
-};
+import { projectQueries } from '../../apollo/queries';
 
 // TODO: encapsulate it in a redux component
 const handleError = (error) => {
   notification.error({
     duration:    0,
     message:     'An error occured :(',
-    description: error.message,
+    description: (error && error.message) || null,
   });
 };
 
-const handleSubmit = (variables, createProject) => {
-  createProject({ variables });
-};
-
-const NewProject = ({ rowProps = {}, colProps = { span: 24 }, push }) => {
+const NewProject = ({
+  rowProps = {}, colProps = { span: 24 }, handleOnSubmit,
+}) => {
   return (
-    <Mutation mutation={mutation}>
-      {
-        (createProject, { loading, error, data }) => {
-          if (data) {
-            return submitSuccessful(push);
-          }
-
-          if (error) {
-            handleError(error);
-          }
-
-          return (
-            <Row {...rowProps}>
-              <Col {...colProps}>
-                <Card title="New project" >
-                  <NewProjectForm
-                    onSubmit={(values) => { handleSubmit(values, createProject); }}
-                    loading={loading}
-                  />
-                </Card>
-              </Col>
-            </Row>
-          );
-        }
-      }
-    </Mutation>
+    <Row {...rowProps}>
+      <Col {...colProps}>
+        <Card title="New project" >
+          <NewProjectForm
+            onSubmit={handleOnSubmit}
+          />
+        </Card>
+      </Col>
+    </Row>
   );
 };
 
 const mapDispatchToProps = {
   push: pushAction,
-  handleError,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(NewProject));
+const enhance = compose(
+  graphql(projectQueries.createProject),
+  connect(null, mapDispatchToProps),
+  withHandlers({
+    handleOnSubmit: ({ push, mutate }) => {
+      return (variables) => {
+        return mutate({
+          variables,
+          refetchQueries: [{ query: projectQueries.allProjects }],
+        })
+          .then(({ data: { createProject } }) => {
+            notification.success({ message: `Project [${createProject.name}] successfully created.` });
+            return push('/projects');
+          })
+          .catch((error) => { handleError(error); });
+      };
+    },
+  }),
+);
+
+export default enhance(NewProject);

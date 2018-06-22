@@ -20,7 +20,7 @@ const NewProjectFormWrapper = ({ form, onSubmit, loading }) => {
       <FormItemInput
         id="name"
         customFormItemProps={{ label: 'name' }}
-        decorator={{}}
+        decorator={decorators.requiredDecorator()}
         getFieldDecorator={getFieldDecorator}
       />
 
