@@ -1,3 +1,17 @@
+#nav {
+  float: right
+}
+
+.search-box {
+  /* border-left: 1px solid #ebedf0; */
+  float: left;
+  height: 22px;
+  line-height: 22px;
+  padding-left: 16px;
+  margin: 22px auto 0;
+ }
+
+/* Project */
 .project-card {
   border-radius: 5px !important;
 }

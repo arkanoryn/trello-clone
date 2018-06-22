@@ -11,23 +11,26 @@ const goToNewProject = (push) => {
   return (push('/projects/new'));
 };
 
-const createProjectButton = (push) => {
+const NewProjectButton = ({ push }) => {
   return (
     <Tooltip title="New project">
       <Button
         icon="plus"
         onClick={() => { goToNewProject(push); }}
-        shape="circle"
-        size="large"
         type="primary"
-      />
+        style={{ float: 'right', marginTop: -64 }}
+      >
+        New project
+      </Button>
     </Tooltip>
   );
 };
 
 const ProjectsPage = ({ push }) => {
   return (
-    <AppLayout actions={createProjectButton(push)}>
+    <AppLayout>
+      <NewProjectButton push={push} />
+
       <ProjectList />
     </AppLayout>
   );

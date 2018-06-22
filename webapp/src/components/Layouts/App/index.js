@@ -1,9 +1,10 @@
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 
-import { Layout, Breadcrumb } from 'antd';
+import { Input, Layout, Breadcrumb, Row, Menu } from 'antd';
 
 const { Header, Content, Footer } = Layout;
+const { Search } = Input;
 
 const breadcrumbNameMap = {
   '/projects':     'Projects',
@@ -35,12 +36,35 @@ const breadcrumbItems = (location) => {
 };
 
 const AppLayout = ({
-  location, children, actions,
+  location, children, actions = ['new project'],
 }) => {
   return (
     <Layout>
       <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-        {actions}
+        <Row>
+          <div className="search-box">
+            <Search
+              placeholder="Search..."
+              onSearch={() => { /* TODO */ }}
+              style={{ width: '100%' }}
+            />
+          </div>
+          <Menu
+            mode="horizontal"
+            style={{ borderBottom: 'none', lineHeight: '46px', marginTop: 12 }}
+            id="nav"
+          >
+            {
+              actions.map((action) => {
+                return (
+                  <Menu.Item key={action}>
+                    {action}
+                  </Menu.Item>
+                );
+              })
+            }
+          </Menu>
+        </Row>
       </Header>
 
       <Content style={{ padding: '0 50px', marginTop: 64 }}>
