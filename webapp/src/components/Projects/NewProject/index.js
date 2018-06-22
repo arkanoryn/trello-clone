@@ -1,5 +1,8 @@
 import NewProjectForm from './NewProjectForm';
 
-export default {
+const tmp = '';
+
+export {
   NewProjectForm,
+  tmp,
 };
