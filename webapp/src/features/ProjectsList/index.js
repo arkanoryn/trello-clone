@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { push as pushAction } from 'connected-react-router';
+import { withRouter } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import { Col, Row } from 'antd';
 
@@ -14,10 +17,10 @@ const DEFAULT_GUTTER_SIZE = 32;
 const DEFAULT_STYLE = { gutterSize: DEFAULT_GUTTER_SIZE, paddingBottom: DEFAULT_GUTTER_SIZE };
 
 const DEFAULT_COL_PROPS = {
-  sm: SM_COL,
-  md: MD_COL,
-  lg: LG_COL,
-  xl: XL_COL,
+  sm:    SM_COL,
+  md:    MD_COL,
+  lg:    LG_COL,
+  xl:    XL_COL,
   style: DEFAULT_STYLE,
 };
 
@@ -25,7 +28,9 @@ const DEFAULT_ROW_PROPS = {
   gutter: DEFAULT_GUTTER_SIZE,
 };
 
-const ProjectList = ({ colProps = DEFAULT_COL_PROPS, rowProps = DEFAULT_ROW_PROPS, projectTileProps = {} }) => {
+const ProjectList = ({
+  push, colProps = DEFAULT_COL_PROPS, rowProps = DEFAULT_ROW_PROPS, projectTileProps = {},
+}) => {
   return (
     <Query query={projectQueries.allProjects}>
       {
@@ -51,7 +56,11 @@ const ProjectList = ({ colProps = DEFAULT_COL_PROPS, rowProps = DEFAULT_ROW_PROP
                 data.allProjects.map((project) => {
                   return (
                     <Col key={project.id} {...colProps}>
-                      <ProjectTile {...project} {...projectTileProps} />
+                      <ProjectTile
+                        {...project}
+                        {...projectTileProps}
+                        goToProject={() => { push(`/projects/${project.id}`); }}
+                      />
                     </Col>
                   );
                 })
@@ -64,4 +73,8 @@ const ProjectList = ({ colProps = DEFAULT_COL_PROPS, rowProps = DEFAULT_ROW_PROP
   );
 };
 
-export default ProjectList;
+const mapDispatchToProps = {
+  push: pushAction,
+};
+
+export default withRouter(connect(null, mapDispatchToProps)(ProjectList));

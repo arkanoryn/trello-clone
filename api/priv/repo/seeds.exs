@@ -12,6 +12,7 @@
 
 alias TrelloCloneApi.Accounts.User
 alias TrelloCloneApi.Organization.Project
+alias TrelloCloneApi.Project.Board
 alias TrelloCloneApi.Repo
 
 users = [
@@ -64,4 +65,22 @@ projects = [
   }
 ]
 
-Enum.map(projects, fn project -> Repo.insert!(project) end)
+saved_projects = Enum.map(projects, fn project -> Repo.insert!(project) end)
+first_project = List.first(saved_projects)
+
+boards = [
+  %Board{
+    name: "First board",
+    description:
+      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities.",
+    project_id: first_project.id
+  },
+  %Board{
+    name: "Second board",
+    description:
+      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities.",
+    project_id: first_project.id
+  }
+]
+
+Enum.map(boards, fn board -> Repo.insert!(board) end)

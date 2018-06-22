@@ -1,14 +1,17 @@
 import React from 'react';
-import { Card, Icon, Avatar, Tooltip } from 'antd';
+import { Card, Icon, Tooltip } from 'antd';
 
 const { Meta } = Card;
 
-const DEFAULT_COVER = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png';
 const DEFAULT_STYLE = {
-  height:       200,
+  height:       400,
   textOverflow: 'ellipsis',
   whiteSpace:   'pre-line',
   overflow:     'hidden',
+};
+
+const goToBoard = (id) => {
+  console.log(`go to project: ${id}`);
 };
 
 // const goToEditProject = (id) => {
@@ -19,26 +22,26 @@ const DEFAULT_STYLE = {
 //   console.log(`go to project settings: ${id}`);
 // };
 
-const ProjectTile = ({
-  id, name, description, image, style = DEFAULT_STYLE, goToProject = () => { },
+const BoardTile = ({
+  id, name, description, style = DEFAULT_STYLE,
 }) => {
   return (
     <Card
       hoverable
       className="project-card"
       bordered={false}
-      title={<div><Avatar src={image || DEFAULT_COVER} /> {name}</div>}
+      title={name}
       extra={<Icon type="ellipsis" />}
       style={style}
     >
       <Tooltip title={description}>
         <Meta
           description={description}
-          onClick={() => { return goToProject(id); }}
+          onClick={() => { return goToBoard(id); }}
         />
       </Tooltip>
     </Card >
   );
 };
 
-export default ProjectTile;
+export default BoardTile;

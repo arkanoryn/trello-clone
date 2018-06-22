@@ -8,6 +8,7 @@ const { Search } = Input;
 
 const breadcrumbNameMap = {
   '/projects':     'Projects',
+  '/projects/1':   'Project',
   '/projects/new': 'New',
 };
 
