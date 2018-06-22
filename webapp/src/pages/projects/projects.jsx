@@ -20,7 +20,7 @@ const NewProjectButton = ({ push }) => {
         type="primary"
         style={{ float: 'right', marginTop: -64 }}
       >
-        New project
+        New
       </Button>
     </Tooltip>
   );

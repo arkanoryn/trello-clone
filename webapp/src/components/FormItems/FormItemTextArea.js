@@ -17,7 +17,7 @@ const defaultFormItemProps = {
 };
 
 const FormItemTextArea = ({
-  id, decorator, getFieldDecorator, customFormItemProps = {}, customTextAreaProps = {},
+  id, getFieldDecorator, decorator = {}, customFormItemProps = {}, customTextAreaProps = {},
 }) => {
   const formItemProps = { ...defaultFormItemProps, ...customFormItemProps };
 

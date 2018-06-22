@@ -12,7 +12,7 @@ const handleSubmit = (e, form, onSubmit) => {
   });
 };
 
-const NewProjectFormWrapper = ({ form, onSubmit }) => {
+const NewProjectFormWrapper = ({ form, onSubmit, loading }) => {
   const { getFieldDecorator } = form;
 
   return (
@@ -20,7 +20,7 @@ const NewProjectFormWrapper = ({ form, onSubmit }) => {
       <FormItemInput
         id="name"
         customFormItemProps={{ label: 'name' }}
-        decorator={decorators.requiredDecorator()}
+        decorator={{}}
         getFieldDecorator={getFieldDecorator}
       />
 
@@ -32,7 +32,7 @@ const NewProjectFormWrapper = ({ form, onSubmit }) => {
         getFieldDecorator={getFieldDecorator}
       />
 
-      <FormItemSubmitButton />
+      <FormItemSubmitButton buttonProps={{ loading }} />
     </Form>
   );
 };

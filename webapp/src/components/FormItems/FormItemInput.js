@@ -20,7 +20,7 @@ const defaultInputProps = {
 
 const
     FormItemInput = ({
-      id, decorator, getFieldDecorator, customFormItemProps = {}, customInputProps = {},
+      id, getFieldDecorator, decorator = {}, customFormItemProps = {}, customInputProps = {},
     }) => {
       const formItemProps = { ...defaultFormItemProps, ...customFormItemProps };
       const inputProps = { ...defaultInputProps, ...customInputProps };

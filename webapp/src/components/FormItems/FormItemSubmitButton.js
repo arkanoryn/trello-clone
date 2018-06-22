@@ -21,9 +21,14 @@ const FormItemSubmitButton =
   ({
     children, buttonText = 'Submit', buttonProps = DEFAULT_BUTTON_PROPS, formItemProps = DEFAULT_FORM_ITEM_PROPS,
   }) => {
+    const buttonState = {
+      ...DEFAULT_BUTTON_PROPS,
+      ...buttonProps,
+    };
+
     return (
       <FormItem {...formItemProps}>
-        <Button {...buttonProps}>
+        <Button {...buttonState}>
           {children || buttonText}
         </Button>
       </FormItem>
