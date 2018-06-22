@@ -7,8 +7,6 @@ import { Button, Tooltip } from 'antd';
 import { AppLayout } from '../../components';
 import ProjectList from '../../features/ProjectsList';
 
-const breadcrumb = ['Home', 'Projects'];
-
 const goToNewProject = (push) => {
   return (push('/projects/new'));
 };
@@ -29,7 +27,7 @@ const createProjectButton = (push) => {
 
 const ProjectsPage = ({ push }) => {
   return (
-    <AppLayout breadcrumb={breadcrumb} actions={createProjectButton(push)}>
+    <AppLayout actions={createProjectButton(push)}>
       <ProjectList />
     </AppLayout>
   );
