@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Col, Row } from 'antd';
 
-import { ProjectTile } from '../../components';
+import { ProjectTile, ProjectTileLoading, ProjectTileError } from '../../components';
 
 const XL_COL = 6;
 const LG_COL = 8;
@@ -40,8 +40,20 @@ const ProjectList = ({ colProps = DEFAULT_COL_PROPS, rowProps = DEFAULT_ROW_PROP
     <Query query={query}>
       {
         ({ loading, error, data }) => {
-          if (loading) return <div>Loading...</div>;
-          if (error) return <div>Error :(</div>;
+          if (loading) {
+            return (
+              <Row {...rowProps}>
+                {
+                  <Col span={24}>
+                    <ProjectTileLoading />;
+                  </Col>
+                }
+              </Row>
+            );
+          }
+          if (error) {
+            return <ProjectTileError error={error.message} />;
+          }
 
           return (
             <Row {...rowProps}>
