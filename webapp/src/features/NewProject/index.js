@@ -23,11 +23,11 @@ const NewProject = ({ rowProps = {}, colProps = { span: 24 } }) => {
   return (
     <Mutation mutation={mutation}>
       {
-        (createProject, res) => {
+        (createProject) => {
           return (
             <Row {...rowProps}>
               <Col {...colProps}>
-                <Card title="New project">
+                <Card title="New project" >
                   <NewProjectForm onSubmit={(values) => { handleSubmit(values, createProject); }} />
                 </Card>
               </Col>
