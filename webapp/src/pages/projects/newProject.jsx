@@ -1,14 +1,15 @@
 import React from 'react';
 
-import { NewProjectForm } from '../../components';
+import { AppLayout } from '../../components';
+import { NewProject } from '../../features';
+
+const breadcrumb = ['Home', 'Projects', 'New project'];
 
 const NewProjectPage = () => {
   return (
-    <div>
-      New project NewProjectPage
-
-      <NewProjectForm />
-    </div>
+    <AppLayout breadcrumb={breadcrumb}>
+      <NewProject />
+    </AppLayout>
   );
 };
 

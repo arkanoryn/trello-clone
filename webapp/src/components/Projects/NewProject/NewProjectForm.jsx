@@ -3,25 +3,33 @@ import { Button, Form, Icon, Input } from 'antd';
 
 const FormItem = Form.Item;
 
-const NewProjectFormWrapper = ({ form }) => {
+const handleSubmit = (e, form, onSubmit) => {
+  e.preventDefault();
+  form.validateFields((err, values) => {
+    if (!err) {
+      onSubmit(values);
+    }
+  });
+};
+
+const NewProjectFormWrapper = ({ form, onSubmit }) => {
   const { getFieldDecorator } = form;
 
   return (
-    <Form layout="vertical" onSubmit={this.handleSubmit}>
+    <Form layout="vertical" onSubmit={(e) => { handleSubmit(e, form, onSubmit); }}>
       <FormItem
         validateStatus={true ? 'error' : ''}
         help="help"
       >
-        {getFieldDecorator('userName', {
+        {getFieldDecorator('name', {
           rules: [{ required: true, message: 'Please input your username!' }],
         })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />)}
       </FormItem>
       <FormItem >
-        {getFieldDecorator('password', {
+        {getFieldDecorator('description', {
           rules: [{ required: true, message: 'Please input your Password!' }],
         })(<Input
           prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-          type="password"
           placeholder="Password"
         />)}
       </FormItem>
@@ -29,7 +37,6 @@ const NewProjectFormWrapper = ({ form }) => {
         <Button
           type="primary"
           htmlType="submit"
-          disabled
         >
           Log in
         </Button>
