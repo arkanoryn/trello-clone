@@ -1,8 +1,6 @@
-import ProjectsPage from './projects';
-
-const tmp = '';
+import { NewProjectPage, ProjectsPage } from './projects/';
 
 export {
   ProjectsPage,
-  tmp,
+  NewProjectPage,
 };

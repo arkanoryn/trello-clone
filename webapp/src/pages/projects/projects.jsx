@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Tooltip } from 'antd';
 
-import { AppLayout } from '../components';
-import ProjectList from '../features/ProjectsList';
+import { AppLayout } from '../../components';
+import ProjectList from '../../features/ProjectsList';
 
 const breadcrumb = ['Home', 'Projects'];
 const createProjectButton = (
