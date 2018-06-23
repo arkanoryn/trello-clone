@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderRoutes } from 'react-router-config';
 
-import { NewProjectPage, ProjectsPage, ProjectPage } from './';
+import { BoardPage, NewProjectPage, ProjectsPage, ProjectPage } from './';
 
 const Root = ({ route }) => {
   return (
@@ -33,6 +33,10 @@ const routes = [
         path:      '/projects/new',
         exact:     true,
         component: NewProjectPage,
+      },
+      {
+        path:      '/projects/:project_id/boards/:id',
+        component: BoardPage,
       },
       {
         path:      '/projects/:id',

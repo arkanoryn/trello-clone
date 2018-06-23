@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { push as pushAction } from 'connected-react-router';
 import { graphql } from 'react-apollo';
 import { compose } from 'recompose';
@@ -31,8 +32,13 @@ const DEFAULT_ROW_PROPS = {
   },
 };
 
+const goToBoard = (push, project_id, board_id) => {
+  console.log('goToBoard', project_id, board_id);
+  push(`/projects/${project_id}/boards/${board_id}`);
+};
+
 const ProjectPage = ({
-  data: { allBoards }, rowProps = DEFAULT_ROW_PROPS, colProps = DEFAULT_COL_PROPS,
+  data: { allBoards }, rowProps = DEFAULT_ROW_PROPS, colProps = DEFAULT_COL_PROPS, push,
 }) => {
   const project = (allBoards && allBoards[0] && allBoards[0].project) || {};
   const breadcrumbItems = {
@@ -53,7 +59,10 @@ const ProjectPage = ({
           allBoards.map((board) => {
             return (
               <Col key={board.id} {...colProps}>
-                <BoardTile {...board} />
+                <BoardTile
+                  {...board}
+                  goToBoard={(id) => { return goToBoard(push, project.id, id); }}
+                />
               </Col>
             );
           })
@@ -81,4 +90,4 @@ const enhance = compose(
   connect(null, mapDispatchToProps),
 );
 
-export default enhance(ProjectPage);
+export default enhance(withRouter(ProjectPage));

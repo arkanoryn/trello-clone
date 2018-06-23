@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import { Card, Icon, Tooltip } from 'antd';
 
 const { Meta } = Card;
@@ -10,10 +11,6 @@ const DEFAULT_STYLE = {
   overflow:     'hidden',
 };
 
-const goToBoard = (id) => {
-  console.log(`go to project: ${id}`);
-};
-
 // const goToEditProject = (id) => {
 //   console.log(`go to edit project: ${id}`);
 // };
@@ -23,12 +20,12 @@ const goToBoard = (id) => {
 // };
 
 const BoardTile = ({
-  id, name, description, style = DEFAULT_STYLE,
+  id, name, description, style = DEFAULT_STYLE, goToBoard = () => { },
 }) => {
   return (
     <Card
       hoverable
-      className="project-card"
+      className="board-card"
       bordered={false}
       title={name}
       extra={<Icon type="ellipsis" />}
@@ -44,4 +41,4 @@ const BoardTile = ({
   );
 };
 
-export default BoardTile;
+export default withRouter(BoardTile);

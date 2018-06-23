@@ -1,3 +1,4 @@
+/* nav */
 #nav {
   float: right
 }
@@ -22,4 +23,61 @@
 
 .project-card > .ant-card-head {
   border-radius: 5px 5px 0 0;
+}
+
+/* Board */
+.board-card > .ant-card-head {
+    opacity: 100;
+    background: url('https://images.unsplash.com/photo-1441484295955-db07de1fdbad?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=bf92d3187d1e3d66c11350e493bb2180&auto=format&fit=crop&w=400&q=60'),
+    linear-gradient(to right, rgba(4, 190, 91, 1), rgba(0, 130, 213, 6));
+}
+
+.board-card > .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+  color: #374355 !important;
+}
+
+.column-list-wrapper {
+  height: 80vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.column-list {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.column-list ul {
+  list-style: none;
+  overflow: auto;
+}
+
+.column-list .column-view {
+  overflow: auto;
+  display: inline-block;
+  width: 350px;
+  height: 100%;
+  border-right: 1px solid #374355;
+  padding: 0 10px;
+}
+
+.column-header {
+  background-color: #374355;
+  border: 1px solid #ADB9CA;
+  padding: 15px 5px 5px 15px;
+  min-height: 20px;
+  margin-bottom: 25px;
+}
+
+/* ticket */
+.ticket-card {
+  margin-top: 15px !important;
+}
+
+.ticket-card .ant-card-meta-detail {
+  text-align: justify;
+  overflow: visible !important;
+  white-space: normal !important;
 }
