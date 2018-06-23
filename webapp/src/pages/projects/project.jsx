@@ -31,12 +31,19 @@ const DEFAULT_ROW_PROPS = {
   },
 };
 
-const ProjectPage = ({ data: { allBoards }, rowProps = DEFAULT_ROW_PROPS, colProps = DEFAULT_COL_PROPS }) => {
+const ProjectPage = ({
+  data: { allBoards }, rowProps = DEFAULT_ROW_PROPS, colProps = DEFAULT_COL_PROPS,
+}) => {
+  const project = (allBoards && allBoards[0] && allBoards[0].project) || {};
+  const breadcrumbItems = {
+    1: project,
+  };
+
   return (
-    <AppLayout>
+    <AppLayout breadcrumbItems={breadcrumbItems}>
       <Row {...rowProps}>
         <Col span={24}>
-          <ProjectTile style={{}} />
+          <ProjectTile {...project} style={{}} />
         </Col>
       </Row>
 
@@ -61,18 +68,16 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  graphql(
-    boardQueries.allBoards,
-    {
-      options: ({ match: { params } }) => {
-        return {
-          variables: {
-            project_id: params.id,
-          },
-        };
-      },
+  graphql(boardQueries.allBoards, {
+    options: ({ match: { params } }) => {
+      return {
+        name:      'board',
+        variables: {
+          project_id: params.id,
+        },
+      };
     },
-  ),
+  }),
   connect(null, mapDispatchToProps),
 );
 

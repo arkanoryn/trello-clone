@@ -8,11 +8,10 @@ const { Search } = Input;
 
 const breadcrumbNameMap = {
   '/projects':     'Projects',
-  '/projects/1':   'Project',
   '/projects/new': 'New',
 };
 
-const extraBreadcrumbItems = ({ pathname }) => {
+const extraBreadcrumbItems = ({ pathname }, breadcrumbItems) => {
   const pathSnippets = (pathname.split('/').filter((i) => { return i; }));
 
   return (pathSnippets.map((_, index) => {
@@ -21,23 +20,26 @@ const extraBreadcrumbItems = ({ pathname }) => {
     return (
       <Breadcrumb.Item key={url}>
         <Link to={url}>
-          {breadcrumbNameMap[url]}
+          {
+            (breadcrumbItems && breadcrumbItems[index]) ?
+              breadcrumbItems[index].name : breadcrumbNameMap[url]
+          }
         </Link>
       </Breadcrumb.Item>
     );
   }));
 };
 
-const breadcrumbItems = (location) => {
+const setBreadcrumbItems = (location, breadcrumbItems) => {
   return [(
     <Breadcrumb.Item key="home">
       <Link to="/">Home</Link>
     </Breadcrumb.Item>
-  )].concat(extraBreadcrumbItems(location));
+  )].concat(extraBreadcrumbItems(location, breadcrumbItems));
 };
 
 const AppLayout = ({
-  location, children, actions = ['new project'],
+  location, children, actions = ['new project'], breadcrumbItems,
 }) => {
   return (
     <Layout>
@@ -70,7 +72,7 @@ const AppLayout = ({
 
       <Content style={{ padding: '0 50px', marginTop: 64 }}>
         <Breadcrumb separator=">" style={{ margin: '16px 0' }}>
-          {breadcrumbItems(location)}
+          {setBreadcrumbItems(location, breadcrumbItems)}
         </Breadcrumb>
 
         <div style={{ padding: 24, minHeight: 380 }}>

@@ -1,5 +1,15 @@
 import gql from 'graphql-tag';
 
+const getProject = gql`
+  query getProject($id: ID!) {
+    getProject (id: $id) {
+      id
+      name
+      description
+    }
+  }
+`;
+
 const allProjects = gql`
   {
     allProjects {
@@ -23,4 +33,5 @@ const createProject = gql`
 export {
   allProjects,
   createProject,
+  getProject,
 };

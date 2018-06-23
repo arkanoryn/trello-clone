@@ -40,7 +40,7 @@ const ProjectList = ({
               <Row {...rowProps}>
                 {
                   <Col span={24}>
-                    <ProjectTileLoading />;
+                    <ProjectTileLoading />
                   </Col>
                 }
               </Row>

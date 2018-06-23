@@ -36,6 +36,12 @@ defmodule TrelloCloneApiWeb.Schema do
       resolve(&OrganizationResolver.all_projects/3)
     end
 
+    field(:get_project, non_null(:project)) do
+      arg(:id, non_null(:id))
+
+      resolve(&OrganizationResolver.get_project/3)
+    end
+
     field(:all_boards, non_null(list_of(non_null(:board)))) do
       arg(:project_id, non_null(:id))
 

@@ -8,6 +8,8 @@ const allBoards = gql`
       description
       project {
         id
+        name
+        description
       }
     }
   }

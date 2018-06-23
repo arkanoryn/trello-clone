@@ -6,7 +6,7 @@ defmodule TrelloCloneApi.Project.Board do
   schema "boards" do
     field(:description, :string)
     field(:name, :string)
-    field(:project_id, :id)
+    belongs_to(:project, TrelloCloneApi.Organization.Project)
 
     timestamps()
   end
@@ -20,6 +20,10 @@ defmodule TrelloCloneApi.Project.Board do
   end
 
   def by_project(query, project_id) do
-    from(c in query, where: c.project_id == ^project_id)
+    from(
+      c in query,
+      where: c.project_id == ^project_id,
+      preload: [:project]
+    )
   end
 end
