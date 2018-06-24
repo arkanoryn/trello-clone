@@ -1,5 +1,6 @@
 defmodule TrelloCloneApiWeb.Schema do
   use Absinthe.Schema
+  use Absinthe.Ecto, repo: TrelloCloneApi.Repo
 
   alias TrelloCloneApiWeb.AccountsResolver
   alias TrelloCloneApiWeb.OrganizationResolver
@@ -24,7 +25,7 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
 
-    field(:project, :project)
+    field(:project, :project, resolve: assoc(:project))
   end
 
   query do

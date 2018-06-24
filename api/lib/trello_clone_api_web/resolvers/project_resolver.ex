@@ -13,7 +13,6 @@ defmodule TrelloCloneApiWeb.ProjectResolver do
 
     case Project.create_board(args) do
       {:ok, board} ->
-        board = assign_assoc(board)
         {:ok, board}
 
       _error ->
