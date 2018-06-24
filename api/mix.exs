@@ -10,7 +10,14 @@ defmodule TrelloCloneApi.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -23,14 +30,15 @@ defmodule TrelloCloneApi.Mixfile do
       extra_applications: [
         :logger,
         :runtime_tools,
-        :absinthe_plug
+        :absinthe_plug,
+        :ex_machina
       ]
     ]
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
+  defp elixirc_paths(:test), do: ["lib", "web", "test/support", "test/factories"]
+  defp elixirc_paths(_), do: ["lib", "web"]
 
   # Specifies your project dependencies.
   #
@@ -50,8 +58,10 @@ defmodule TrelloCloneApi.Mixfile do
       {:absinthe_plug, "~> 1.4"},
       {:poison, "~> 3.1.0"},
       {:ex_unit_notifier, "~> 0.1", only: :test},
+      {:ex_machina, "~> 2.2"},
       {:mix_test_watch, "~> 0.6", only: :dev, runtime: false},
-      {:faker, "~> 0.10", only: :test}
+      {:faker, "~> 0.10", only: :test},
+      {:excoveralls, "~> 0.8", only: :test}
     ]
   end
 

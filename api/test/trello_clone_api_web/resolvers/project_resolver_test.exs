@@ -2,33 +2,21 @@ defmodule TrelloCloneApiWeb.ProjectResolverTest do
   use TrelloCloneApiWeb.ConnCase
   alias TrelloCloneApiWeb.AbsintheHelpers
 
-  alias TrelloCloneApi.Organization
-  alias TrelloCloneApi.Project
-
-  @project_attrs %{
-    "name" => Faker.Company.name(),
-    "description" => Faker.Company.bs()
-  }
-  @board_attrs %{
-    "name" => Faker.Pokemon.name(),
-    "description" => Faker.Company.bs()
-  }
-
-  def sanitize_value(key, val), do: if(key === "id", do: String.to_integer(val), else: val)
+  def sanitize_value(key, val) when key === "id", do: String.to_integer(val)
+  def sanitize_value(_key, val) when is_map(val), do: sanitize_response(val)
+  def sanitize_value(_key, val), do: val
 
   def sanitize_response(response) do
     for {key, val} <- response, into: %{}, do: {String.to_atom(key), sanitize_value(key, val)}
   end
 
   describe "Project Resolver" do
-    test "allBoards/0 return all boards attached to project from db with provided keys (id, name, description) only",
+    test "allBoards/1 return all boards attached to project from db with provided keys (id, name, description) only",
          context do
-      {:ok, project} = Organization.create_project(@project_attrs)
-      {:ok, project_2} = Organization.create_project(@project_attrs)
-      {:ok, board_1} = Project.create_board(Map.put(@board_attrs, "project_id", project.id))
-      {:ok, board_2} = Project.create_board(Map.put(@board_attrs, "project_id", project.id))
-
-      {:ok, board_3} = Project.create_board(Map.put(@board_attrs, "project_id", project_2.id))
+      project = insert(:project)
+      board_1 = insert(:board, project: project)
+      board_2 = insert(:board, project: project)
+      board_3 = insert(:board)
 
       query = """
       {
@@ -64,73 +52,85 @@ defmodule TrelloCloneApiWeb.ProjectResolverTest do
       end)
     end
 
-    # test "allProjects/0 called with invalid key", context do
-    #   {:ok, _project} = Organization.create_project(@project_valid_attr)
+    test "allBoards/1 called with invalid key", context do
+      project = insert(:project)
 
-    #   query = """
-    #   {
-    #     allProjects {
-    #       id
-    #       invalid
-    #     }
-    #   }
-    #   """
+      query = """
+      {
+        allBoards(project_id: #{project.id}) {
+          id
+          invalid
+        }
+      }
+      """
 
-    #   res =
-    #     context.conn
-    #     |> post("/graphiql", AbsintheHelpers.query_skeleton(query, "projects"))
+      res =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.query_skeleton(query, "projects"))
 
-    #   response = json_response(res, 400)
-    #   errors = response["errors"]
-    #   [e | _] = errors
+      response = json_response(res, 400)
+      errors = response["errors"]
+      [e | _] = errors
 
-    #   assert res.status === 400
-    #   assert Map.has_key?(response, "errors")
-    #   assert String.contains?(e["message"], "invalid")
-    # end
+      assert res.status === 400
+      assert Map.has_key?(response, "errors")
+      assert String.contains?(e["message"], "invalid")
+    end
 
-    # test "createProject with valid arguments", context do
-    #   query = """
-    #   mutation {
-    #       createProject(
-    #       name: "#{@project_valid_attr["name"]}",
-    #       description: "#{@project_valid_attr["description"]}",
-    #     ) {
-    #       id
-    #       name
-    #       description
-    #     }
-    #   }
-    #   """
+    test "createBoard/3 with valid arguments", context do
+      project = insert(:project)
+      board_params = string_params_for(:board)
 
-    #   project =
-    #     context.conn
-    #     |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
-    #     |> (fn res -> json_response(res, 200)["data"]["createProject"] end).()
-    #     |> sanitize_response()
+      query = """
+      mutation {
+        createBoard(
+          name: "#{board_params["name"]}",
+          description: "#{board_params["description"]}",
+          projectId: #{project.id}
+        ) {
+          id
+          name
+          description
+          project {
+            id
+            name
+            description
+          }
+        }
+      }
+      """
 
-    #   assert Map.has_key?(project, :id)
-    #   assert project.name === @project_valid_attr["name"]
-    #   assert project.description === @project_valid_attr["description"]
-    # end
+      board =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createBoard"] end).()
+        |> sanitize_response()
 
-    # test "createProject with invalid arguments", context do
-    #   query = """
-    #   mutation {
-    #       createProject(
-    #         name: "#{@project_valid_attr["name"]}",
-    #     ) {
-    #       id
-    #     }
-    #   }
-    #   """
+      assert Map.has_key?(board, :id)
+      assert board.name === board_params["name"]
+      assert board.description === board_params["description"]
+      assert board.project.id === project.id
+      assert board.project.name === project.name
+      assert board.project.description === project.description
+    end
 
-    #   response =
-    #     context.conn
-    #     |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
-    #     |> json_response(400)
+    test "createBoard/3 with invalid arguments", context do
+      query = """
+      mutation {
+          createProject(
+            name: "#{string_params_for(:board)["name"]}",
+        ) {
+          id
+        }
+      }
+      """
 
-    #   assert Map.has_key?(response, "errors")
-    # end
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> json_response(400)
+
+      assert Map.has_key?(response, "errors")
+    end
   end
 end

@@ -22,6 +22,7 @@ defmodule TrelloCloneApi.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import TrelloCloneApi.DataCase
+      import TrelloCloneApi.Factory
     end
   end
 

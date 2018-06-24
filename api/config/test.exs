@@ -16,4 +16,5 @@ config :trello_clone_api, TrelloCloneApi.Repo,
   # password: "postgres",
   database: "trello_clone_api_test",
   hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  loggers: []

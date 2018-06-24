@@ -1,81 +1,90 @@
 defmodule TrelloCloneApi.ProjectTest do
   use TrelloCloneApi.DataCase
 
-  alias TrelloCloneApi.Organization
   alias TrelloCloneApi.Project
 
   describe "boards" do
     alias TrelloCloneApi.Project.Board
 
-    @project_valid_attrs %{description: "some description", name: "some name"}
-    @valid_attrs %{
-      description: "some description",
-      name: "some name",
-      project_id: nil
-    }
-    @update_attrs %{description: "some updated description", name: "some updated name"}
-    @invalid_attrs %{description: nil, name: nil}
-
-    def project_fixture(attrs \\ %{}) do
-      {:ok, project} =
-        attrs
-        |> Enum.into(@project_valid_attrs)
-        |> Organization.create_project()
-
-      project
+    def project_fixture(_attrs \\ %{}) do
+      insert(:project)
     end
 
-    def board_fixture(attrs \\ %{}) do
-      {:ok, board} =
-        attrs
-        |> Enum.into(%{@valid_attrs | project_id: project_fixture(@project_valid_attrs).id})
-        |> Project.create_board()
-
-      board
+    def board_fixture(_attrs \\ %{}) do
+      insert(:board)
     end
 
     test "list_boards/1 returns all boards" do
-      board = board_fixture()
+      board = insert(:board)
+
       assert Project.list_boards(board.project_id) == [board]
     end
 
     test "get_board!/1 returns the board with given id" do
-      board = board_fixture()
-      assert Project.get_board!(board.id) == board
+      board = insert(:board)
+
+      assert Project.get_board!(board.id) == %{
+               board
+               | project: %Ecto.Association.NotLoaded{
+                   __field__: :project,
+                   __cardinality__: :one,
+                   __owner__: TrelloCloneApi.Project.Board
+                 }
+             }
     end
 
     test "create_board/1 with valid data creates a board" do
-      assert {:ok, %Board{} = board} = Project.create_board(@valid_attrs)
-      assert board.description == "some description"
-      assert board.name == "some name"
+      project = insert(:project)
+
+      attrs =
+        params_for(:board)
+        |> Map.put(:project_id, project.id)
+
+      assert {:ok, %Board{} = board} = Project.create_board(attrs)
+      assert board.description == attrs.description
+      assert board.name == attrs.name
     end
 
     test "create_board/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Project.create_board(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = params_for(:board, name: nil) |> Project.create_board()
     end
 
     test "update_board/2 with valid data updates the board" do
-      board = board_fixture()
-      assert {:ok, board} = Project.update_board(board, @update_attrs)
+      board = insert(:board)
+      attrs = params_for(:board)
+
+      assert {:ok, board} = Project.update_board(board, attrs)
       assert %Board{} = board
-      assert board.description == "some updated description"
-      assert board.name == "some updated name"
+      assert board.description == attrs.description
+      assert board.name == attrs.name
     end
 
     test "update_board/2 with invalid data returns error changeset" do
-      board = board_fixture()
-      assert {:error, %Ecto.Changeset{}} = Project.update_board(board, @invalid_attrs)
-      assert board == Project.get_board!(board.id)
+      board = insert(:board)
+      attrs = %{description: nil, name: nil}
+
+      assert {:error, %Ecto.Changeset{}} = Project.update_board(board, attrs)
+
+      assert %{
+               board
+               | project: %Ecto.Association.NotLoaded{
+                   __field__: :project,
+                   __cardinality__: :one,
+                   __owner__: TrelloCloneApi.Project.Board
+                 }
+             } == Project.get_board!(board.id)
     end
 
     test "delete_board/1 deletes the board" do
-      board = board_fixture()
+      board = insert(:board)
+
       assert {:ok, %Board{}} = Project.delete_board(board)
       assert_raise Ecto.NoResultsError, fn -> Project.get_board!(board.id) end
     end
 
     test "change_board/1 returns a board changeset" do
-      board = board_fixture()
+      board = insert(:board)
+
       assert %Ecto.Changeset{} = Project.change_board(board)
     end
   end

@@ -2,13 +2,6 @@ defmodule TrelloCloneApiWeb.OrganizationsResolverTest do
   use TrelloCloneApiWeb.ConnCase
   alias TrelloCloneApiWeb.AbsintheHelpers
 
-  alias TrelloCloneApi.Organization
-
-  @project_valid_attr %{
-    "name" => Faker.Company.name(),
-    "description" => Faker.Company.bs()
-  }
-
   def sanitize_value(key, val), do: if(key === "id", do: String.to_integer(val), else: val)
 
   def sanitize_response(response) do
@@ -18,7 +11,7 @@ defmodule TrelloCloneApiWeb.OrganizationsResolverTest do
   describe "Organization Resolver" do
     test "allProjects/0 return all projects from db with provided keys (id, name, description) only",
          context do
-      {:ok, project} = Organization.create_project(@project_valid_attr)
+      project = insert(:project)
 
       query = """
       {
@@ -47,8 +40,6 @@ defmodule TrelloCloneApiWeb.OrganizationsResolverTest do
     end
 
     test "allProjects/0 called with invalid key", context do
-      {:ok, _project} = Organization.create_project(@project_valid_attr)
-
       query = """
       {
         allProjects {
@@ -71,12 +62,14 @@ defmodule TrelloCloneApiWeb.OrganizationsResolverTest do
       assert String.contains?(e["message"], "invalid")
     end
 
-    test "createProject with valid arguments", context do
+    test "createProject/2 with valid arguments", context do
+      attrs = string_params_for(:project)
+
       query = """
       mutation {
           createProject(
-          name: "#{@project_valid_attr["name"]}",
-          description: "#{@project_valid_attr["description"]}",
+          name: "#{attrs["name"]}",
+          description: "#{attrs["description"]}",
         ) {
           id
           name
@@ -92,15 +85,17 @@ defmodule TrelloCloneApiWeb.OrganizationsResolverTest do
         |> sanitize_response()
 
       assert Map.has_key?(project, :id)
-      assert project.name === @project_valid_attr["name"]
-      assert project.description === @project_valid_attr["description"]
+      assert project.name === attrs["name"]
+      assert project.description === attrs["description"]
     end
 
-    test "createProject with invalid arguments", context do
+    test "createProject/2 with invalid arguments", context do
+      attrs = string_params_for(:project)
+
       query = """
       mutation {
           createProject(
-            name: "#{@project_valid_attr["name"]}",
+            name: "#{attrs["name"]}",
         ) {
           id
         }

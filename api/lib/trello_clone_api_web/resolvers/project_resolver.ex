@@ -1,4 +1,5 @@
 defmodule TrelloCloneApiWeb.ProjectResolver do
+  alias TrelloCloneApi.Organization
   alias TrelloCloneApi.Project
 
   def all_boards(_root, %{project_id: project_id}, _info) do
@@ -7,14 +8,20 @@ defmodule TrelloCloneApiWeb.ProjectResolver do
     {:ok, projects}
   end
 
-  # def create_project(_root, args, _info) do
-  #   # TODO: add detailed error message handling later
-  #   case Project.create_project(args) do
-  #     {:ok, project} ->
-  #       {:ok, project}
+  def create_board(_root, args, _info) do
+    args = %{args | project_id: String.to_integer(args.project_id)}
 
-  #     _error ->
-  #       {:error, "could not create user"}
-  #   end
-  # end
+    case Project.create_board(args) do
+      {:ok, board} ->
+        board = assign_assoc(board)
+        {:ok, board}
+
+      _error ->
+        {:error, "could not create user"}
+    end
+  end
+
+  defp assign_assoc(board) do
+    Map.put(board, :project, Organization.get_project!(board.project_id))
+  end
 end

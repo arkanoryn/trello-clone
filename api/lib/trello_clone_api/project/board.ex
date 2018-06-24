@@ -15,7 +15,7 @@ defmodule TrelloCloneApi.Project.Board do
   def changeset(board, attrs) do
     board
     |> cast(attrs, [:name, :description, :project_id], ~w())
-    |> validate_required([:name, :description])
+    |> validate_required([:name, :description, :project_id])
     |> foreign_key_constraint(:project_id)
   end
 
@@ -25,5 +25,9 @@ defmodule TrelloCloneApi.Project.Board do
       where: c.project_id == ^project_id,
       preload: [:project]
     )
+  end
+
+  def load_project(query) do
+    from(c in query, preload: [:project])
   end
 end

@@ -64,5 +64,13 @@ defmodule TrelloCloneApiWeb.Schema do
 
       resolve(&OrganizationResolver.create_project/3)
     end
+
+    field(:create_board, :board) do
+      arg(:name, non_null(:string))
+      arg(:description, non_null(:string))
+      arg(:project_id, non_null(:id))
+
+      resolve(&ProjectResolver.create_board/3)
+    end
   end
 end

@@ -20,18 +20,20 @@ defmodule TrelloCloneApiWeb.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
+      import TrelloCloneApi.Factory
+
       # The default endpoint for testing
       @endpoint TrelloCloneApiWeb.Endpoint
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(TrelloCloneApi.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(TrelloCloneApi.Repo, {:shared, self()})
     end
+
     :ok
   end
-
 end
