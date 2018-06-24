@@ -3,6 +3,7 @@ defmodule TrelloCloneApiWeb.Schema do
   use Absinthe.Ecto, repo: TrelloCloneApi.Repo
 
   alias TrelloCloneApiWeb.AccountsResolver
+  alias TrelloCloneApiWeb.BoardResolver
   alias TrelloCloneApiWeb.OrganizationResolver
   alias TrelloCloneApiWeb.ProjectResolver
 
@@ -17,7 +18,7 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:name, non_null(:string))
     field(:description, non_null(:string))
 
-    field(:boards, list_of(:board))
+    field(:boards, list_of(:board), resolve: assoc(:board))
   end
 
   object :board do
@@ -26,6 +27,14 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:description, non_null(:string))
 
     field(:project, :project, resolve: assoc(:project))
+  end
+
+  object :column do
+    field(:id, non_null(:id))
+    field(:name, non_null(:string))
+    field(:wip_limit, non_null(:integer))
+
+    field(:board, :board, resolve: assoc(:board))
   end
 
   query do
@@ -47,6 +56,12 @@ defmodule TrelloCloneApiWeb.Schema do
       arg(:project_id, non_null(:id))
 
       resolve(&ProjectResolver.all_boards/3)
+    end
+
+    field(:all_columns, non_null(list_of(non_null(:column)))) do
+      arg(:board_id, non_null(:id))
+
+      resolve(&BoardResolver.all_columns/3)
     end
   end
 
@@ -72,6 +87,14 @@ defmodule TrelloCloneApiWeb.Schema do
       arg(:project_id, non_null(:id))
 
       resolve(&ProjectResolver.create_board/3)
+    end
+
+    field(:create_column, :column) do
+      arg(:name, non_null(:string))
+      arg(:wip_limit, non_null(:integer))
+      arg(:board_id, non_null(:id))
+
+      resolve(&BoardResolver.create_column/3)
     end
   end
 end

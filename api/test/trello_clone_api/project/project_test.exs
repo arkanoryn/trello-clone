@@ -6,14 +6,6 @@ defmodule TrelloCloneApi.ProjectTest do
   describe "boards" do
     alias TrelloCloneApi.Project.Board
 
-    def project_fixture(_attrs \\ %{}) do
-      insert(:project)
-    end
-
-    def board_fixture(_attrs \\ %{}) do
-      insert(:board)
-    end
-
     test "list_boards/1 returns all boards" do
       board = insert(:board)
 

@@ -17,8 +17,10 @@ defmodule TrelloCloneApi.Board do
       [%Column{}, ...]
 
   """
-  def list_columns do
-    Repo.all(Column)
+  def list_columns(board_id) do
+    Column
+    |> Column.by_board(board_id)
+    |> Repo.all()
   end
 
   @doc """

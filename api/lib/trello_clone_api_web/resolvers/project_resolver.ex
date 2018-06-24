@@ -19,8 +19,4 @@ defmodule TrelloCloneApiWeb.ProjectResolver do
         {:error, "could not create user"}
     end
   end
-
-  defp assign_assoc(board) do
-    Map.put(board, :project, Organization.get_project!(board.project_id))
-  end
 end

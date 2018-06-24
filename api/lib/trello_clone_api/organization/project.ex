@@ -2,10 +2,11 @@ defmodule TrelloCloneApi.Organization.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "projects" do
-    field :description, :string
-    field :name, :string
+    field(:description, :string)
+    field(:name, :string)
+
+    has_many(:boards, TrelloCloneApi.Project.Board)
 
     timestamps()
   end
