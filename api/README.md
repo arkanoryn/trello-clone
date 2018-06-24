@@ -10,6 +10,15 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
+## Testing
+
+To run the tests once: `mix test`
+
+To run the tests on each file save: `mix test.watch`
+
+## Factories
+Factories are set on the `/lib/factories` folder in order to be accessible from the seed.
+
 ## Learn more
 
   * Official website: http://www.phoenixframework.org/
