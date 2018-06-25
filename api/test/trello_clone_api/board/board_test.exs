@@ -51,6 +51,16 @@ defmodule TrelloCloneApi.BoardTest do
       assert column.wip_limit == attrs.wip_limit
     end
 
+    test "update_column/2 with only one arg updates the column's arg and leave the rest untouched" do
+      origin = insert(:column)
+      attrs = %{name: Faker.Pokemon.name()}
+
+      assert {:ok, column} = Board.update_column(origin, attrs)
+      assert %Column{} = column
+      assert column.name == attrs.name
+      assert column.wip_limit == origin.wip_limit
+    end
+
     test "update_column/2 with invalid data returns error changeset" do
       column = insert(:column) |> Factory.unload_assoc()
       attrs = %{name: nil, wip_limit: nil}

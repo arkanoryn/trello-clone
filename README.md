@@ -27,7 +27,8 @@ You can also create a `API_URL` env variable.
 
 ### API
 - [ ] rework api/seed to use factories
-- [ ] CRUD column
+- [ ] rework schema by adding notation
+- [X] CRUD column
 - [ ] CRUD board's ticket
 - [ ] CRUD users
 - [ ] Assign user to ticket

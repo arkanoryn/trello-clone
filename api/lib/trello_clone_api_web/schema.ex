@@ -37,6 +37,11 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:board, :board, resolve: assoc(:board))
   end
 
+  input_object :column_params do
+    field(:name, :string)
+    field(:wip_limit, :integer)
+  end
+
   query do
     field(:all_users, non_null(list_of(non_null(:user)))) do
       resolve(&AccountsResolver.all_users/3)
@@ -95,6 +100,19 @@ defmodule TrelloCloneApiWeb.Schema do
       arg(:board_id, non_null(:id))
 
       resolve(&BoardResolver.create_column/3)
+    end
+
+    field(:update_column, :column) do
+      arg(:id, non_null(:id))
+      arg(:column_params, non_null(:column_params))
+
+      resolve(&BoardResolver.update_column/3)
+    end
+
+    field(:delete_column, :column) do
+      arg(:id, non_null(:id))
+
+      resolve(&BoardResolver.delete_column/3)
     end
   end
 end

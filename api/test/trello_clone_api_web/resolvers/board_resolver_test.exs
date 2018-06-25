@@ -2,6 +2,8 @@ defmodule TrelloCloneApiWeb.BoardResolverTest do
   use TrelloCloneApiWeb.ConnCase
 
   alias TrelloCloneApiWeb.AbsintheHelpers
+  alias TrelloCloneApi.Factory
+  alias TrelloCloneApi.Board
 
   def sanitize_value(key, val) when key === "id", do: String.to_integer(val)
   def sanitize_value(_key, val) when is_map(val), do: sanitize_response(val)
@@ -143,6 +145,198 @@ defmodule TrelloCloneApiWeb.BoardResolverTest do
         |> json_response(400)
 
       assert Map.has_key?(response, "errors")
+    end
+
+    test "updateColumn/3 with all valid arguments", context do
+      column = insert(:column)
+      column_params = string_params_for(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+          column_params: {
+            name: "#{column_params["name"]}",
+            wip_limit: #{column_params["wip_limit"]}
+          }
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      res_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["updateColumn"] end).()
+        |> sanitize_response()
+
+      assert res_column.id === column.id
+      assert res_column.name === column_params["name"]
+      assert res_column.wip_limit === column_params["wip_limit"]
+    end
+
+    test "updateColumn/3 with only the name to update", context do
+      column = insert(:column)
+      column_params = string_params_for(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+          columnParams: {
+            name: "#{column_params["name"]}",
+          }
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      res_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["updateColumn"] end).()
+        |> sanitize_response()
+
+      assert res_column.id === column.id
+      assert res_column.name === column_params["name"]
+      assert res_column.wip_limit === column.wip_limit
+    end
+
+    test "updateColumn/3 with only the wip_limit to update", context do
+      column = insert(:column)
+      column_params = string_params_for(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+          column_params: {
+            wip_limit: #{column_params["wip_limit"]}
+          }
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      res_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["updateColumn"] end).()
+        |> sanitize_response()
+
+      assert res_column.id === column.id
+      assert res_column.wip_limit === column_params["wip_limit"]
+      assert res_column.name === column.name
+    end
+
+    test "updateColumn/3 without empty column", context do
+      column = insert(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+          column_params: {
+          }
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      res_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["updateColumn"] end).()
+        |> sanitize_response()
+
+      assert res_column.id === column.id
+      assert res_column.name === column.name
+      assert res_column.wip_limit === column.wip_limit
+    end
+
+    test "updateColumn/3 without args", context do
+      column = insert(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> json_response(400)
+
+      assert Map.has_key?(response, "errors")
+    end
+
+    test "updateColumn/3 with invalid args", context do
+      column = insert(:column)
+
+      query = """
+      mutation {
+        updateColumn(
+          id: #{column.id},
+          column_params: {
+            name: 42
+          }
+        ) {
+          id
+          name
+          wip_limit
+        }
+      }
+      """
+
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> json_response(400)
+
+      assert Map.has_key?(response, "errors")
+    end
+
+    test "deleteColumn/3", context do
+      board = insert(:board)
+      column = insert(:column, board: board)
+      ref_column = insert(:column, board: board) |> Factory.unload_assoc()
+
+      query = """
+      mutation {
+        deleteColumn(
+          id: #{column.id},
+        ) {
+          id
+        }
+      }
+      """
+
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["deleteColumn"] end).()
+
+      assert column.id === String.to_integer(response["id"])
+      assert Board.list_columns(board.id) === [ref_column]
     end
   end
 end
