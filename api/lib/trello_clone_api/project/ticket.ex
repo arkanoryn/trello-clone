@@ -7,34 +7,26 @@ defmodule TrelloCloneApi.Project.Ticket do
     field(:description, :string)
     field(:estimation, :integer)
     field(:name, :string)
-    field(:tags, :string)
-    field(:type, :integer)
+    field(:tags, :string, default: "")
+    field(:kind, :integer)
 
     belongs_to(:board, TrelloCloneApi.Project.Board)
     belongs_to(:column, TrelloCloneApi.Board.Column)
 
-    # Tickets can be nested into each other
+    # Tickets can be nested into each other, future feature, not used atm
     belongs_to(:ticket, TrelloCloneApi.Project.Ticket)
     has_many(:tickets, TrelloCloneApi.Project.Ticket)
 
     timestamps()
   end
 
-  @required_fields ~w[type, name, description, tags, estimation, column_position, board_id, column_id]
+  @casting_fields ~w(kind name description tags estimation column_position board_id column_id)a
+  @required_fields ~w(kind name description estimation column_position board_id column_id)a
 
   @doc false
   def changeset(ticket, attrs) do
     ticket
-    |> cast(attrs, [
-      :type,
-      :name,
-      :description,
-      :tags,
-      :estimation,
-      :column_position,
-      :board_id,
-      :column_id
-    ])
+    |> cast(attrs, @casting_fields)
     |> validate_required(@required_fields)
   end
 end

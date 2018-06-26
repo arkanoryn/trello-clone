@@ -4,4 +4,5 @@ defmodule TrelloCloneApi.Factory do
   use TrelloCloneApi.BoardFactory
   use TrelloCloneApi.ColumnFactory
   use TrelloCloneApi.ProjectFactory
+  use TrelloCloneApi.TicketFactory
 end

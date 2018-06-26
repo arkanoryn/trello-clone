@@ -1,6 +1,5 @@
 defmodule TrelloCloneApiWeb.BoardResolver do
   alias TrelloCloneApi.Board
-  alias TrelloCloneApi.Board.Column
 
   def all_columns(_roots, %{board_id: board_id}, _info) do
     columns = Board.list_columns(board_id)

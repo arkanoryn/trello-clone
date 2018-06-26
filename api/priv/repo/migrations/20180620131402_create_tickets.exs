@@ -3,10 +3,10 @@ defmodule TrelloCloneApi.Repo.Migrations.CreateTickets do
 
   def change do
     create table(:tickets) do
-      add(:type, :integer)
-      add(:name, :string)
+      add(:kind, :integer)
+      add(:name, :text)
       add(:description, :text)
-      add(:tags, :string)
+      add(:tags, :string, default: "")
       add(:estimation, :integer)
       add(:column_position, :integer)
       add(:ticket_id, references(:tickets, on_delete: :nothing))
