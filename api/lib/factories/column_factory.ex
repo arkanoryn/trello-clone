@@ -7,6 +7,7 @@ defmodule TrelloCloneApi.ColumnFactory do
         %Column{
           name: Faker.Pokemon.location(),
           wip_limit: Enum.random(0..42),
+          position: Enum.random(0..42),
           board: build(:board)
         }
       end

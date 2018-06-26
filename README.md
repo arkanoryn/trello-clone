@@ -38,6 +38,7 @@ You can also create a `API_URL` env variable.
 - [ ] Delete Board
 - [ ] Update Project
 - [ ] Update Board
+- [ ] create a position assignment function that rework position order of a list on update
 
 ### Webapp
 - [ ] CRUD columns

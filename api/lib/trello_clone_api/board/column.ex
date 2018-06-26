@@ -6,6 +6,7 @@ defmodule TrelloCloneApi.Board.Column do
   schema "columns" do
     field(:name, :string)
     field(:wip_limit, :integer)
+    field(:position, :integer)
     belongs_to(:board, TrelloCloneApi.Project.Board)
 
     timestamps()
@@ -14,8 +15,8 @@ defmodule TrelloCloneApi.Board.Column do
   @doc false
   def changeset(column, attrs) do
     column
-    |> cast(attrs, [:name, :wip_limit, :board_id])
-    |> validate_required([:name, :wip_limit, :board_id])
+    |> cast(attrs, [:name, :wip_limit, :position, :board_id])
+    |> validate_required([:name, :wip_limit, :position, :board_id])
     |> foreign_key_constraint(:board_id)
   end
 
@@ -24,5 +25,11 @@ defmodule TrelloCloneApi.Board.Column do
       c in query,
       where: c.board_id == ^board_id
     )
+  end
+
+  def order_by(query, field, direction \\ :asc) do
+    values = [{direction, field}]
+
+    from(c in query, order_by: ^values)
   end
 end

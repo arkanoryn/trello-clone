@@ -100,6 +100,7 @@ defmodule TrelloCloneApiWeb.BoardResolverTest do
         createColumn(
           name: "#{column_params["name"]}",
           wip_limit: #{column_params["wip_limit"]},
+          position: #{column_params["position"]},
           boardId: #{board.id}
         ) {
           id
@@ -126,6 +127,55 @@ defmodule TrelloCloneApiWeb.BoardResolverTest do
       assert column.board.id === board.id
       assert column.board.name === board.name
       assert column.board.description === board.description
+    end
+
+    test "createColumns/3 with valid arguments but without position", context do
+      board = insert(:board)
+      column_params = string_params_for(:column)
+
+      query = """
+      mutation {
+        createColumn(
+          name: "#{column_params["name"]}",
+          wip_limit: #{column_params["wip_limit"]},
+          boardId: #{board.id}
+        ) {
+          id
+          position
+        }
+      }
+      """
+
+      first_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createColumn"] end).()
+        |> sanitize_response()
+
+      second_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createColumn"] end).()
+        |> sanitize_response()
+
+      third_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createColumn"] end).()
+        |> sanitize_response()
+
+      fourth_column =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createColumn"] end).()
+        |> sanitize_response()
+
+      assert Map.has_key?(first_column, :id)
+      assert Map.has_key?(second_column, :id)
+      assert first_column.position === 0
+      assert second_column.position === 1
+      assert third_column.position === 2
+      assert fourth_column.position === 3
     end
 
     test "createColumn/3 with invalid arguments", context do

@@ -58,9 +58,9 @@ defmodule TrelloCloneApi.Mixfile do
       {:absinthe_plug, "~> 1.4"},
       {:poison, "~> 3.1.0"},
       {:ex_unit_notifier, "~> 0.1", only: :test},
-      {:ex_machina, "~> 2.2"},
+      {:ex_machina, "~> 2.2", only: [:test, :dev]},
       {:mix_test_watch, "~> 0.6", only: :dev, runtime: false},
-      {:faker, "~> 0.10", only: :test},
+      {:faker, "~> 0.10", only: [:test, :dev]},
       {:excoveralls, "~> 0.8", only: :test}
     ]
   end

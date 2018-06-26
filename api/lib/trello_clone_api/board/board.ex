@@ -13,10 +13,19 @@ defmodule TrelloCloneApi.Board do
 
   ## Examples
 
-      iex> list_columns()
-      [%Column{}, ...]
+  iex> list_columns()
+  [%Column{}, ...]
 
   """
+  require IEx
+
+  def list_columns(board_id, %{order_by: [field, direction]}) do
+    Column
+    |> Column.by_board(board_id)
+    |> Column.order_by(field, direction)
+    |> Repo.all()
+  end
+
   def list_columns(board_id) do
     Column
     |> Column.by_board(board_id)

@@ -1,5 +1,4 @@
 defmodule TrelloCloneApiWeb.ProjectResolver do
-  alias TrelloCloneApi.Organization
   alias TrelloCloneApi.Project
 
   def all_boards(_root, %{project_id: project_id}, _info) do

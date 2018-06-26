@@ -33,6 +33,7 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:id, non_null(:id))
     field(:name, non_null(:string))
     field(:wip_limit, non_null(:integer))
+    field(:position, :integer)
 
     field(:board, :board, resolve: assoc(:board))
   end
@@ -40,6 +41,7 @@ defmodule TrelloCloneApiWeb.Schema do
   input_object :column_params do
     field(:name, :string)
     field(:wip_limit, :integer)
+    field(:position, :integer)
   end
 
   query do
@@ -97,6 +99,7 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:create_column, :column) do
       arg(:name, non_null(:string))
       arg(:wip_limit, non_null(:integer))
+      arg(:position, :integer)
       arg(:board_id, non_null(:id))
 
       resolve(&BoardResolver.create_column/3)
