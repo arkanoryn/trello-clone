@@ -11,6 +11,7 @@ defmodule TrelloCloneApi.TicketFactory do
           tags: Faker.Lorem.words(1..3) |> Enum.join(", "),
           column_position: Enum.random(1..10),
           kind: Enum.random(1..4),
+          state: Enum.random(1..4),
           board: build(:board),
           column: build(:column)
         }

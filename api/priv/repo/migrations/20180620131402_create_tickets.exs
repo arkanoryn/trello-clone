@@ -4,6 +4,7 @@ defmodule TrelloCloneApi.Repo.Migrations.CreateTickets do
   def change do
     create table(:tickets) do
       add(:kind, :integer)
+      add(:state, :integer)
       add(:name, :text)
       add(:description, :text)
       add(:tags, :string, default: "")

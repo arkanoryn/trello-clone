@@ -133,4 +133,116 @@ defmodule TrelloCloneApiWeb.ProjectResolverTest do
       assert Map.has_key?(response, "errors")
     end
   end
+
+  describe "ticket related resolver" do
+    test "create_tickets/3 with valid arguments", context do
+      board = insert(:board)
+      column = insert(:column, board: board)
+      ticket_params = string_params_for(:ticket)
+
+      query = """
+      mutation {
+        createTicket(
+          name: "#{ticket_params["name"]}",
+          description: "#{ticket_params["name"]}",
+          estimation: #{ticket_params["estimation"]},
+          columnPosition: #{ticket_params["column_position"]},
+          tags: "#{ticket_params["tags"]}",
+          kind: #{ticket_params["kind"]},
+          state: #{ticket_params["state"]},
+          boardId: #{board.id},
+          columnId: #{column.id}
+        ) {
+          id
+          name
+          description
+          estimation
+          columnPosition
+          tags
+          kind
+          tags
+          state
+          board {
+            id
+          }
+          column {
+            id
+          }
+        }
+      }
+      """
+
+      ticket =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["createTicket"] end).()
+        |> sanitize_response()
+
+      assert Map.has_key?(ticket, :id)
+      assert ticket.name === ticket_params["name"]
+      assert ticket.description === ticket_params["name"]
+      assert ticket.estimation === ticket_params["estimation"]
+      assert ticket.columnPosition === ticket_params["column_position"]
+      assert ticket.tags === ticket_params["tags"]
+      assert ticket.kind === ticket_params["kind"]
+      assert ticket.state === ticket_params["state"]
+      assert ticket.board.id === board.id
+      assert ticket.column.id === column.id
+    end
+
+    test "update_tickets/3 with valid arguments", context do
+      ticket = insert(:ticket)
+      ticket_params = string_params_for(:ticket)
+
+      query = """
+      mutation {
+        updateTicket(
+          id: #{ticket.id},
+          ticket_params: {
+            name: "#{ticket_params["name"]}",
+            description: "#{ticket_params["name"]}",
+            estimation: #{ticket_params["estimation"]},
+            columnPosition: #{ticket_params["column_position"]},
+            tags: "#{ticket_params["tags"]}",
+            kind: #{ticket_params["kind"]},
+            state: #{ticket_params["state"]},
+          }
+        ) {
+          id
+          name
+          description
+          estimation
+          columnPosition
+          tags
+          kind
+          tags
+          state
+          board {
+            id
+          }
+          column {
+            id
+          }
+        }
+      }
+      """
+
+      updated_ticket =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["updateTicket"] end).()
+        |> sanitize_response()
+
+      assert updated_ticket.id === ticket.id
+      assert updated_ticket.name === ticket_params["name"]
+      assert updated_ticket.description === ticket_params["name"]
+      assert updated_ticket.estimation === ticket_params["estimation"]
+      assert updated_ticket.columnPosition === ticket_params["column_position"]
+      assert updated_ticket.tags === ticket_params["tags"]
+      assert updated_ticket.kind === ticket_params["kind"]
+      assert updated_ticket.state === ticket_params["state"]
+      assert updated_ticket.board.id === ticket.board.id
+      assert updated_ticket.column.id === ticket.column.id
+    end
+  end
 end

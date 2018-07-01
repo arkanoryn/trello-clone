@@ -26,10 +26,10 @@ You can also create a `API_URL` env variable.
 ## TODOs
 
 ### API
-- [ ] rework api/seed to use factories
-- [ ] rework schema by adding notation
+- [ ] Rework api/seed to use factories
+- [ ] Rework schema by adding notation
 - [X] CRUD column
-- [ ] CRUD board's ticket
+- [X] CU board's ticket
 - [ ] CRUD users
 - [ ] Assign user to ticket
 - [ ] Link board's tickets to project
@@ -38,7 +38,11 @@ You can also create a `API_URL` env variable.
 - [ ] Delete Board
 - [ ] Update Project
 - [ ] Update Board
-- [ ] create a position assignment function that rework position order of a list on update
+- [ ] Create a position assignment function that rework position order of a list on update
+- [ ] Tickets kind
+- [ ] Tickets state
+- [ ] Update ticket tests by testing invalid cases
+- [ ] Ticket should be creatable without position provided
 
 ### Webapp
 - [ ] CRUD columns
