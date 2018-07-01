@@ -389,4 +389,103 @@ defmodule TrelloCloneApiWeb.BoardResolverTest do
       assert Board.list_columns(board.id) === [ref_column]
     end
   end
+
+  describe "tickets" do
+    test "moveTicket/3 with only columnId change", context do
+      board = insert(:board)
+      origin_column = insert(:column, board: board)
+      destination_column = insert(:column, board: board)
+      ticket = insert(:ticket, column: origin_column)
+
+      query = """
+      mutation {
+        moveTicket(
+          id: #{ticket.id},
+          columnId: #{destination_column.id}
+        ) {
+          id
+          column {
+            id
+          }
+        }
+      }
+      """
+
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["moveTicket"] end).()
+        |> sanitize_response()
+
+      assert response.id === ticket.id
+      assert response.column.id === destination_column.id
+    end
+
+    test "moveTicket/3 with columnId and position change", context do
+      board = insert(:board)
+      origin_column = insert(:column, board: board)
+      destination_column = insert(:column, board: board)
+      new_position = Enum.random(1..4)
+      ticket = insert(:ticket, column: origin_column)
+
+      query = """
+      mutation {
+        moveTicket(
+          id: #{ticket.id},
+          columnId: #{destination_column.id},
+          columnPosition:#{new_position}
+        ) {
+          id
+          columnPosition
+          column {
+            id
+          }
+        }
+      }
+      """
+
+      response =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.mutation_skeleton(query))
+        |> (fn res -> json_response(res, 200)["data"]["moveTicket"] end).()
+        |> sanitize_response()
+
+      assert response.id === ticket.id
+      assert response.column.id === destination_column.id
+      assert response.columnPosition === new_position
+    end
+
+    test "all_column_ticket/3 fetch all tickets from column", context do
+      column = insert(:column)
+      insert(:column)
+
+      other_ticket = insert(:ticket)
+      tickets = insert_list(4, :ticket, column: column)
+
+      query = """
+      {
+        allColumnTickets(column_id: #{column.id}) {
+          id
+          column {
+            id
+          }
+        }
+      }
+      """
+
+      all_tickets =
+        context.conn
+        |> post("/graphiql", AbsintheHelpers.query_skeleton(query, "columnTickets"))
+        |> (fn res -> json_response(res, 200)["data"]["allColumnTickets"] end).()
+        |> Enum.map(fn ticket -> sanitize_response(ticket) end)
+
+      Enum.map(tickets, fn ticket ->
+        assert Enum.any?(all_tickets, fn t -> t.id === ticket.id end)
+        assert ticket.column.id === column.id
+      end)
+
+      assert !Enum.any?(all_tickets, fn t -> t.id === other_ticket.id end)
+      assert other_ticket.column_id !== column.id
+    end
+  end
 end

@@ -7,6 +7,7 @@ defmodule TrelloCloneApi.Board do
   alias TrelloCloneApi.Repo
 
   alias TrelloCloneApi.Board.Column
+  alias TrelloCloneApi.Project.Ticket
 
   @doc """
   Returns the list of columns.
@@ -17,8 +18,6 @@ defmodule TrelloCloneApi.Board do
   [%Column{}, ...]
 
   """
-  require IEx
-
   def list_columns(board_id, %{order_by: [field, direction]}) do
     Column
     |> Column.by_board(board_id)
@@ -111,5 +110,18 @@ defmodule TrelloCloneApi.Board do
   """
   def change_column(%Column{} = column) do
     Column.changeset(column, %{})
+  end
+
+  def list_tickets(column_id, %{order_by: [field, direction]}) do
+    Ticket
+    |> Ticket.by_column(column_id)
+    |> Ticket.order_by(field, direction)
+    |> Repo.all()
+  end
+
+  def list_columns(column_id) do
+    Ticket
+    |> Ticket.by_column(column_id)
+    |> Repo.all()
   end
 end

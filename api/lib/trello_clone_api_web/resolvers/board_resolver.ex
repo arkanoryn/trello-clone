@@ -1,5 +1,5 @@
 defmodule TrelloCloneApiWeb.BoardResolver do
-  alias TrelloCloneApi.Board
+  alias TrelloCloneApi.{Board, Project}
 
   def all_columns(_roots, %{board_id: board_id}, _info) do
     columns = Board.list_columns(board_id)
@@ -43,6 +43,40 @@ defmodule TrelloCloneApiWeb.BoardResolver do
       _error ->
         %{error: "could not delete column"}
     end
+  end
+
+  def move_ticket(
+        _root,
+        %{id: ticket_id, column_id: column_id, column_position: column_position},
+        _info
+      ) do
+    ticket = Project.get_ticket!(ticket_id)
+
+    case Project.update_ticket(ticket, %{column_id: column_id, column_position: column_position}) do
+      {:ok, ticket} ->
+        {:ok, ticket}
+
+      _error ->
+        %{error: "could not move ticket"}
+    end
+  end
+
+  def move_ticket(_root, %{id: ticket_id, column_id: column_id}, _info) do
+    ticket = Project.get_ticket!(ticket_id)
+
+    case Project.update_ticket(ticket, %{column_id: column_id}) do
+      {:ok, ticket} ->
+        {:ok, ticket}
+
+      _error ->
+        %{error: "could not move ticket"}
+    end
+  end
+
+  def all_column_tickets(_roots, %{column_id: column_id}, _info) do
+    columns = Board.list_tickets(column_id, %{order_by: [:column_position, :asc]})
+
+    {:ok, columns}
   end
 
   defp create_column(args) do

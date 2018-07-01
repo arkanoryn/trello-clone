@@ -94,6 +94,12 @@ defmodule TrelloCloneApiWeb.Schema do
 
       resolve(&BoardResolver.all_columns/3)
     end
+
+    field(:all_column_tickets, non_null(list_of(non_null(:ticket)))) do
+      arg(:column_id, non_null(:id))
+
+      resolve(&BoardResolver.all_column_tickets/3)
+    end
   end
 
   mutation do
@@ -161,6 +167,14 @@ defmodule TrelloCloneApiWeb.Schema do
       arg(:ticket_params, non_null(:ticket_params))
 
       resolve(&ProjectResolver.update_ticket/3)
+    end
+
+    field(:move_ticket, :ticket) do
+      arg(:id, non_null(:id))
+      arg(:column_id, non_null(:id))
+      arg(:column_position, :integer)
+
+      resolve(&BoardResolver.move_ticket/3)
     end
   end
 end

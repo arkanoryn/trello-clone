@@ -1,8 +1,9 @@
 defmodule TrelloCloneApi.Project.Ticket do
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
-  @describe """
+  @doc """
     Ticket representating a task that has to be done.
 
     * column_position: position of the ticket inside the column
@@ -48,5 +49,18 @@ defmodule TrelloCloneApi.Project.Ticket do
     ticket
     |> cast(attrs, @casting_fields)
     |> validate_required(@required_fields)
+  end
+
+  def by_column(query, column_id) do
+    from(
+      c in query,
+      where: c.column_id == ^column_id
+    )
+  end
+
+  def order_by(query, field, direction \\ :asc) do
+    values = [{direction, field}]
+
+    from(c in query, order_by: ^values)
   end
 end
