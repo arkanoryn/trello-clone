@@ -36,6 +36,7 @@ defmodule TrelloCloneApiWeb.Schema do
     field(:position, :integer)
 
     field(:board, :board, resolve: assoc(:board))
+    field(:tickets, list_of(non_null(:ticket)))
   end
 
   input_object :column_params do

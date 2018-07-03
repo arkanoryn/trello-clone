@@ -7,7 +7,9 @@ defmodule TrelloCloneApi.Board.Column do
     field(:name, :string)
     field(:wip_limit, :integer)
     field(:position, :integer)
+
     belongs_to(:board, TrelloCloneApi.Project.Board)
+    has_many(:tickets, TrelloCloneApi.Project.Ticket)
 
     timestamps()
   end
