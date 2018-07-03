@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Card, Icon, Avatar, Dropdown, Menu } from 'antd';
+import { Button, Card, Icon, Avatar, Dropdown, Menu } from 'antd';
 import { sortBy, map } from 'lodash';
 
 import { AppLayout } from '../../components';
+import { newColumnActions, NewColumnModal } from '../../features';
 
 const { Meta } = Card;
 
@@ -45,11 +47,27 @@ const menu = (
   </Menu >
 );
 
-const BoardPage = ({ columns = COLUMNS }) => {
+const actions = (openModal) => {
+  return (
+    <Button
+      ghost
+      icon="plus"
+      onClick={() => { openModal(); }}
+      size="small"
+      type="primary"
+    >
+      New column
+    </Button>
+  );
+};
+
+const BoardPage = ({ columns = COLUMNS, openModal }) => {
   const sortedColumns = sortBy(columns, (col) => { return col.position; });
 
   return (
-    <AppLayout breadcrumbItems={breadcrumbItems}>
+    <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openModal)}>
+      <NewColumnModal />
+
       <div className="column-list-wrapper">
         <ul className="column-list">
           {
@@ -82,8 +100,15 @@ const BoardPage = ({ columns = COLUMNS }) => {
                               ]}
                             >
                               <Meta
-                                avatar={<Avatar size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                                description={<div>This is the description loong This is the description loong This is the description loong This is the description loong This is the description loong</div>}
+                                avatar={<Avatar
+                                  size="large"
+                                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                />}
+                                description={
+                                  <div>This is the description loong This is the description loong This
+                                    is the description loong This is the description loong This is the description loong
+                                  </div>
+                                }
                               />
                             </Card>
                           );
@@ -101,4 +126,8 @@ const BoardPage = ({ columns = COLUMNS }) => {
   );
 };
 
-export default withRouter(BoardPage);
+const mapDispatchToProps = {
+  openModal: newColumnActions.open,
+};
+
+export default withRouter(connect(null, mapDispatchToProps)(BoardPage));

@@ -40,7 +40,7 @@ const setBreadcrumbItems = (location, breadcrumbItems) => {
 };
 
 const AppLayout = ({
-  location, children, actions = ['new project'], breadcrumbItems,
+  location, children, actions, breadcrumbItems,
 }) => {
   return (
     <Layout>
@@ -58,20 +58,20 @@ const AppLayout = ({
             style={{ borderBottom: 'none', lineHeight: '46px', marginTop: 12 }}
             id="nav"
           >
-            {
-              actions.map((action) => {
-                return (
-                  <Menu.Item key={action}>
-                    {action}
-                  </Menu.Item>
-                );
-              })
-            }
+            <Menu.Item key="action">
+              action
+            </Menu.Item>
           </Menu>
         </Row>
       </Header>
 
       <Content style={{ padding: '0 50px', marginTop: 64 }}>
+        {actions &&
+          <div style={{ float: 'right', margin: '16px 24px 0 0' }}>
+            {actions}
+          </div>
+        }
+
         <Breadcrumb separator=">" style={{ margin: '16px 0' }}>
           {setBreadcrumbItems(location, breadcrumbItems)}
         </Breadcrumb>

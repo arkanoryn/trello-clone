@@ -1,10 +1,16 @@
 import { combineReducers } from 'redux';
 
-import { newProjectReducer } from './features';
+import {
+  newColumnReducer,
+  newProjectReducer,
+} from './features';
 
 const rootReducer = combineReducers({
   projects: combineReducers({
     newProject: newProjectReducer,
+  }),
+  columns: combineReducers({
+    newColumn: newColumnReducer,
   }),
 });
 

@@ -51,3 +51,4 @@ You can also create a `API_URL` env variable.
 - [ ] Move tickets from column to column
 - [ ] Move tickets inside the columns
 - [ ] Design tags
+- [ ] Default value for column's position

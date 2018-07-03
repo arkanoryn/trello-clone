@@ -42,8 +42,8 @@ config :mix_test_watch,
 # Configure your database
 config :trello_clone_api, TrelloCloneApi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  # username: "postgres",
-  # password: "postgres",
+  username: "postgres",
+  password: "postgres",
   database: "trello_clone_api_dev",
   hostname: "localhost",
   pool_size: 10

@@ -1,13 +1,15 @@
 import decorators from './decorators';
-import styles from './styles';
 import FormItemInput from './FormItemInput';
-import FormItemTextArea from './FormItemTextArea';
+import FormItemInputNumber from './FormItemInputNumber';
 import FormItemSubmitButton from './FormItemSubmitButton';
+import FormItemTextArea from './FormItemTextArea';
+import styles from './styles';
 
 export {
   decorators,
-  styles,
   FormItemInput,
-  FormItemTextArea,
+  FormItemInputNumber,
   FormItemSubmitButton,
+  FormItemTextArea,
+  styles,
 };

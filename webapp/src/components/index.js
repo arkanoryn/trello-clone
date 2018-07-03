@@ -2,16 +2,28 @@ import AppLayout from './Layouts/App';
 
 import BoardTile from './Boards/BoardTile';
 
+import { NewColumnForm } from './Columns';
+
 import { ProjectTile, ProjectTileError, ProjectTileLoading } from './Projects/ProjectTile';
 import { NewProjectForm } from './Projects/NewProject';
 
-import { decorators, styles, FormItemInput, FormItemTextArea, FormItemSubmitButton } from './FormItems';
+import {
+  decorators,
+  FormItemInput,
+  FormItemInputNumber,
+  FormItemSubmitButton,
+  FormItemTextArea,
+  styles,
+} from './FormItems';
 
 export {
   AppLayout,
 
   // Boards
   BoardTile,
+
+  // Columns
+  NewColumnForm,
 
   // NewProject
   NewProjectForm,
@@ -24,6 +36,7 @@ export {
   // FormItems
   decorators,
   FormItemInput,
+  FormItemInputNumber,
   FormItemSubmitButton,
   FormItemTextArea,
   styles,
