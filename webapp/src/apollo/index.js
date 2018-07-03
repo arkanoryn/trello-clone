@@ -1,6 +1,6 @@
 import React from 'react';
 import { branch, renderComponent } from 'recompose';
-import { Row, Col, Spin } from 'antd';
+import { Alert, Row, Col, Spin } from 'antd';
 
 const Spinner = () => {
   return (
@@ -12,11 +12,33 @@ const Spinner = () => {
   );
 };
 
+const ErrorComponent = () => {
+  return (
+    <Row>
+      <Col span={24} style={{ textAlign: 'center', marginTop: 64 }}>
+        <Alert
+          message="An error occured :("
+          description="Sorry for the inconvenience. Please try again."
+          type="error"
+          showIcon
+          style={{ backgroundColor: 'rgba(237, 41, 92, .10)' }}
+        />
+      </Col>
+    </Row>
+  );
+};
+
 const displayLoadingState = branch(
   ({ data: { loading } }) => { return loading; },
   renderComponent(Spinner),
 );
 
-const tmp = '';
+const displayErrorState = branch(
+  ({ data: { error } }) => { return error; },
+  renderComponent(ErrorComponent),
+);
 
-export { displayLoadingState, tmp };
+export {
+  displayErrorState,
+  displayLoadingState,
+};

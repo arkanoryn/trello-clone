@@ -3,7 +3,7 @@ import { graphql } from 'react-apollo';
 import { compose } from 'recompose';
 import { map, sortBy } from 'lodash';
 
-import { displayLoadingState } from '../../apollo';
+import { displayErrorState, displayLoadingState } from '../../apollo';
 import { columnQueries } from '../../apollo/queries';
 import { Column } from '../../components';
 
@@ -43,6 +43,7 @@ const queryOptions = {
 const enhance = compose(
   graphql(columnQueries.allColumns, queryOptions),
   displayLoadingState,
+  displayErrorState,
 );
 
 export default enhance(BoardView);
