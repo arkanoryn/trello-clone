@@ -7,6 +7,11 @@ const allColumns = gql`
       name
       wip_limit
       position
+      tickets {
+        id
+        name
+        columnPosition
+      }
     }
   }
 `;

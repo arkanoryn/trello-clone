@@ -1,12 +1,14 @@
 import React from 'react';
 import { branch, renderComponent } from 'recompose';
-import { Alert, Row, Col, Spin } from 'antd';
+import { Alert, Card, Row, Col, Spin } from 'antd';
 
 const Spinner = () => {
   return (
     <Row>
-      <Col span={24} style={{ textAlign: 'center', marginTop: 100 }}>
-        <Spin size="large" />
+      <Col span={24} style={{ textAlign: 'center' }}>
+        <Card>
+          <Spin size="large" />
+        </Card>
       </Col>
     </Row>
   );
@@ -15,7 +17,7 @@ const Spinner = () => {
 const ErrorComponent = () => {
   return (
     <Row>
-      <Col span={24} style={{ textAlign: 'center', marginTop: 64 }}>
+      <Col span={24} style={{ textAlign: 'center' }}>
         <Alert
           message="An error occured :("
           description="Sorry for the inconvenience. Please try again."
