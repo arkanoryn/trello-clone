@@ -119,7 +119,7 @@ defmodule TrelloCloneApi.Board do
     |> Repo.all()
   end
 
-  def list_columns(column_id) do
+  def list_tickets(column_id) do
     Ticket
     |> Ticket.by_column(column_id)
     |> Repo.all()

@@ -12,7 +12,6 @@ const breadcrumbNameMap = {
 };
 
 const extraBreadcrumbItems = ({ pathname }, breadcrumbItems) => {
-  console.log('pathname:', pathname);
   const pathSnippets = (pathname.split('/').filter((i) => { return i; }));
 
   return (pathSnippets.map((_, index) => {

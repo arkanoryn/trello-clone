@@ -1,3 +1,4 @@
+import { BoardView } from './BoardView';
 import { NewProject, newProjectReducer, newProjectActions } from './NewProject';
 import {
   newColumnActions,
@@ -7,6 +8,8 @@ import {
 import ProjectsList from './ProjectsList';
 
 export {
+  BoardView,
+
   newColumnActions,
   NewColumnModal,
   newColumnReducer,

@@ -2,7 +2,7 @@ import AppLayout from './Layouts/App';
 
 import BoardTile from './Boards/BoardTile';
 
-import { NewColumnForm } from './Columns';
+import { NewColumnForm, Column } from './Columns';
 
 import { ProjectTile, ProjectTileError, ProjectTileLoading } from './Projects/ProjectTile';
 import { NewProjectForm } from './Projects/NewProject';
@@ -23,6 +23,7 @@ export {
   BoardTile,
 
   // Columns
+  Column,
   NewColumnForm,
 
   // NewProject

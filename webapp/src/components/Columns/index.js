@@ -1,8 +1,7 @@
 import NewColumnForm from './NewColumnForm';
-
-const tmp = '';
+import Column from './Column';
 
 export {
   NewColumnForm,
-  tmp,
+  Column,
 };

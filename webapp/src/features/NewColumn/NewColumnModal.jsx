@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'antd';
-import { graphql } from 'react-apollo';
-import { compose, withHandlers } from 'recompose';
+// import { graphql } from 'react-apollo';
+import { compose } from 'recompose';
 
 import { NewColumnForm } from '../../components';
 import { newColumnActions } from './reducer';
-import { columnQueries } from '../../apollo/queries';
+// import { columnQueries } from '../../apollo/queries';
 
 const handleSubmit = () => {
 
@@ -37,8 +37,7 @@ const mapDispatchToProps = {
   close: newColumnActions.close,
 };
 
-const enhance = compose(
-  // graphql(columnQueries.createProject),
-  connect(mapStateToProps, mapDispatchToProps));
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps));
+// graphql(columnQueries.createProject),
 
 export default enhance(NewColumnModal);
