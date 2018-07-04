@@ -6,6 +6,10 @@ import {
   newColumnReducer,
 } from './NewColumn';
 import ProjectsList from './ProjectsList';
+import {
+  TicketsList,
+  TicketTile,
+} from './Tickets';
 
 export {
   BoardView,
@@ -19,4 +23,7 @@ export {
   newProjectReducer,
 
   ProjectsList,
+
+  TicketsList,
+  TicketTile,
 };
