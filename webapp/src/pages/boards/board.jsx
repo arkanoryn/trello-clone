@@ -1,11 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Button } from 'antd';
+import { graphql } from 'react-apollo';
+import { compose, withHandlers } from 'recompose';
+import { Button, notification } from 'antd';
 import { last } from 'lodash';
 
-import { AppLayout } from '../../components';
-import { newColumnActions, NewColumnModal, BoardView, TicketFormModal } from '../../features';
+import { ticketQueries } from '../../apollo/queries';
+import { AppLayout, GraphqlErrorNotification } from '../../components';
+import { newColumnActions, NewColumnModal, BoardView, TicketFormModal, ticketFormModalActions } from '../../features';
 
 const project = { name: 'Alpha' };
 const board = { name: 'webapp' };
@@ -25,6 +28,52 @@ const actions = (openModal) => {
   );
 };
 
+const handleCreateTicket = ({
+  closeTicketFormModal, mutate, startLoading, endLoading,
+}) => {
+  return (variables) => {
+    startLoading();
+
+    return mutate({
+      variables,
+      refetchQueries: [{ query: ticketQueries.allColumnTickets, variables: { columnId: variables.columnId } }],
+    })
+      .then(({ data: { createTicket } }) => {
+        endLoading();
+        closeTicketFormModal();
+        notification.success({ message: `Column [${createTicket.name}] successfully created.` });
+        return true;
+      })
+      .catch((error) => {
+        endLoading();
+        GraphqlErrorNotification(error);
+      });
+  };
+};
+
+const handleUpdateTicket = ({
+  closeTicketFormModal, mutate, startLoading, endLoading,
+}) => {
+  return (variables) => {
+    startLoading();
+
+    return mutate({
+      variables,
+      refetchQueries: [{ query: ticketQueries.allColumnTickets, variables: { columnId: variables.columnId } }],
+    })
+      .then(({ data: { updateTicket } }) => {
+        endLoading();
+        closeTicketFormModal();
+        notification.success({ message: `Column [${updateTicket.name}] successfully updated.` });
+        return true;
+      })
+      .catch((error) => {
+        endLoading();
+        GraphqlErrorNotification(error);
+      });
+  };
+};
+
 // pathname is in the format: /project/:id/board/:board_id
 // last element of the pathname is the board_id we are looking for
 const getBoardIdFromLocation = ({ pathname }) => {
@@ -33,22 +82,37 @@ const getBoardIdFromLocation = ({ pathname }) => {
   return parseInt(id, 0);
 };
 
-const BoardPage = ({ location, openModal }) => {
+const BoardPage = ({ location, openColumnModal, createTicket }) => {
   // const sortedColumns = sortBy(columns, (col) => { return col.position; });
   const boardId = getBoardIdFromLocation(location);
+  const handleOnSubmit = createTicket;
 
   return (
-    <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openModal)}>
+    <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openColumnModal)}>
       <BoardView boardId={boardId} />
 
       <NewColumnModal boardId={boardId} />
-      <TicketFormModal />
+      <TicketFormModal boardId={boardId} onSubmit={handleOnSubmit} />
     </AppLayout >
   );
 };
 
 const mapDispatchToProps = {
-  openModal: newColumnActions.open,
+  openColumnModal:      newColumnActions.open,
+  startLoading:         ticketFormModalActions.startLoading,
+  endLoading:           ticketFormModalActions.endLoading,
+  closeTicketFormModal: ticketFormModalActions.close,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(BoardPage));
+const enhance = compose(
+  graphql(ticketQueries.createTicket),
+  graphql(ticketQueries.updateTicket),
+  connect(null, mapDispatchToProps),
+  withRouter,
+  withHandlers({
+    createTicket: handleCreateTicket,
+    updateTicket: handleUpdateTicket,
+  }),
+);
+
+export default enhance(BoardPage);

@@ -18,6 +18,8 @@ import {
   styles,
 } from './FormItems';
 
+import { TicketForm } from './Tickets';
+
 export {
   // Alerts
   GraphqlErrorNotification,
@@ -47,4 +49,7 @@ export {
   FormItemSubmitButton,
   FormItemTextArea,
   styles,
+
+  // Tickets
+  TicketForm,
 };

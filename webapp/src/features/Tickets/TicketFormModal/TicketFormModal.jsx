@@ -2,9 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal } from 'antd';
 
+import { TicketForm } from '../../../components';
 import { ticketFormModalActions } from './reducer';
 
-const TicketFormModal = ({ isOpen, isLoading, close }) => {
+const TicketFormModal = ({
+  isOpen, isLoading, close, ticket = {}, ticketsCount = 0, onSubmit, boardId, columnId,
+}) => {
   return (
     <Modal
       title="New ticket"
@@ -15,7 +18,11 @@ const TicketFormModal = ({ isOpen, isLoading, close }) => {
         <Button key="back" onClick={close}>Cancel</Button>,
       ]}
     >
-      text
+      <TicketForm
+        ticket={ticket}
+        ticketsCount={ticketsCount}
+        onSubmit={(values) => { return (onSubmit({ ...values, boardId, columnId })); }}
+      />
     </Modal>
   );
 };
@@ -24,6 +31,8 @@ const mapStateToProps = ({ tickets: { ticketFormModal } }) => {
   return ({
     isOpen:    ticketFormModal.isOpen,
     isLoading: ticketFormModal.isLoading,
+    ticket:    ticketFormModal.ticket,
+    columnId:  ticketFormModal.columnId,
   });
 };
 

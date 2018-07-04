@@ -6,6 +6,8 @@ const END_LOADING = 'TicketFormModal/endsLoading';
 const initialState = {
   isOpen:    false,
   isLoading: false,
+  ticket:    {},
+  columnId:  -1,
 };
 
 const ticketFormModalReducer = (state = initialState, action) => {
@@ -13,7 +15,9 @@ const ticketFormModalReducer = (state = initialState, action) => {
     case OPEN_MODAL:
       return ({
         ...state,
-        isOpen: true,
+        isOpen:   true,
+        ticket:   action.ticket,
+        columnId: parseInt(action.columnId, 0),
       });
 
     case CLOSE_MODAL:
@@ -47,9 +51,11 @@ const ticketFormModalReducer = (state = initialState, action) => {
  **************************************************
  ************************************************ */
 
-const open = () => {
+const open = (columnId, ticket = {}) => {
   return {
     type: OPEN_MODAL,
+    ticket,
+    columnId,
   };
 };
 

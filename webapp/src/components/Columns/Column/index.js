@@ -14,15 +14,14 @@ import { ticketFormModalActions } from '../../../features';
 const ADD_TICKET = 'Column/addTicket';
 const EDIT_COLUMN = 'Column/editColumn';
 const DELETE_COLUMN = 'Column/deleteColumn';
+const EMPTY_TICKET = {};
 
 const { Item: MenuItem } = Menu;
 
 const handleMenuClick = ({ key }, column, actions) => {
-  console.log('clicked menu of column:', column.id);
-
   switch (key) {
     case ADD_TICKET:
-      actions.openModal();
+      actions.openModal(column.id, EMPTY_TICKET);
       break;
 
     case EDIT_COLUMN:

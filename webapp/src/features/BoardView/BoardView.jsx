@@ -8,7 +8,6 @@ import { columnQueries } from '../../apollo/queries';
 import { Column } from '../../components';
 import { TicketsList } from '../../features';
 
-
 const BoardView = ({ data: { allColumns } }) => {
   const sortedColumns = sortBy(allColumns, (col) => { return col.position; });
 
