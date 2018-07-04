@@ -40,13 +40,13 @@ const breadcrumbItems = { 1: project, 2: { name: 'Boards' }, 3: board };
 const actions = (openModal) => {
   return (
     <Button
-      ghost
-      icon="plus"
-      onClick={() => { openModal(); }}
-      size="small"
+          ghost
+          icon="plus"
+          onClick={() => { openModal(); }}
+          size="small"
       type="primary"
     >
-      New column
+            New column
     </Button>
   );
 };
@@ -61,67 +61,13 @@ const getBoardIdFromLocation = ({ pathname }) => {
 
 const BoardPage = ({ location, openModal }) => {
   // const sortedColumns = sortBy(columns, (col) => { return col.position; });
+  const boardId = getBoardIdFromLocation(location);
 
   return (
     <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openModal)}>
-      <NewColumnModal />
+      <NewColumnModal boardId={boardId} />
 
-
-      <BoardView boardId={getBoardIdFromLocation(location)} />
-      <div className="column-list-wrapper">
-        <ul className="column-list">
-          {/* {
-            map(
-              sortedColumns,
-              (column) => {
-                return (
-                  <li className="column-view" key={`column_${column.name}`}>
-                    <div className="column-header">
-                      <h2>{column.name}</h2>
-                    </div>
-
-                    {
-                      map(
-                        column.tickets,
-                        (ticket) => {
-                          return (
-                            <Card
-                              key={`ticket_${ticket.name}`}
-                              className="ticket-card"
-                              actions={[
-                                <span >25 <Icon type="message" /></span>,
-                                <span >52 <Icon type="github" /></span>,
-                                <span >5 <Icon type="paper-clip" /></span>,
-                                <Dropdown overlay={menu}>
-                                  <span>
-                                    <Icon type="setting" />
-                                  </span>
-                                </Dropdown>,
-                              ]}
-                            >
-                              <Meta
-                                avatar={<Avatar
-                                  size="large"
-                                  src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                />}
-                                description={
-                                  <div>This is the description loong This is the description loong This
-                                    is the description loong This is the description loong This is the description loong
-                                  </div>
-                                }
-                              />
-                            </Card>
-                          );
-                        },
-                      )
-                    }
-                  </li>
-                );
-              },
-            )
-          } */}
-        </ul>
-      </div>
+      <BoardView boardId={boardId} />
     </AppLayout >
   );
 };

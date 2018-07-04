@@ -67,7 +67,7 @@ const queryOptions = {
   options: ({ boardId }) => {
     return {
       variables: {
-        board_id: boardId,
+        boardId,
       },
     };
   },

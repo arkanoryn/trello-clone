@@ -1,8 +1,11 @@
 const OPEN_MODAL = 'NewColumnModal/open';
 const CLOSE_MODAL = 'NewColumnModal/close';
+const START_LOADING = 'NewColumnModal/startsLoading';
+const END_LOADING = 'NewColumnModal/endsLoading';
 
 const initialState = {
   isOpen: false,
+  isLoading: false,
 };
 
 const newColumnReducer = (state = initialState, action) => {
@@ -17,6 +20,18 @@ const newColumnReducer = (state = initialState, action) => {
       return ({
         ...state,
         isOpen: false,
+      });
+
+    case START_LOADING:
+      return ({
+        ...state,
+        isLoading: true,
+      });
+
+    case END_LOADING:
+      return ({
+        ...state,
+        isLoading: false,
       });
 
     default:
@@ -44,10 +59,24 @@ const close = () => {
   };
 };
 
+const startLoading = () => {
+  return {
+    type: START_LOADING,
+  };
+};
+
+const endLoading = () => {
+  return {
+    type: END_LOADING,
+  };
+};
+
 
 const newColumnActions = {
   close,
   open,
+  startLoading,
+  endLoading,
 };
 
 // export default newColumnReducer;

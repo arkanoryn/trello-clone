@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
 
-import { decorators, FormItemInput, FormItemInputNumber } from '../../../components';
+import { decorators, FormItemInput, FormItemInputNumber, FormItemSubmitButton } from '../../../components';
 
 const handleSubmit = (e, form, onSubmit) => {
   e.preventDefault();
@@ -14,10 +14,9 @@ const handleSubmit = (e, form, onSubmit) => {
 
 const positivNumberProps = {
   min: 0,
-  max: 0,
 };
 
-const NewColumnFormWrapper = ({ form, onSubmit }) => {
+const NewColumnFormWrapper = ({ form, onSubmit, loading }) => {
   const { getFieldDecorator } = form;
 
   return (
@@ -30,7 +29,7 @@ const NewColumnFormWrapper = ({ form, onSubmit }) => {
       />
 
       <FormItemInputNumber
-        id="wip_limit"
+        id="wipLimit"
         customFormItemProps={{ label: 'Work in progress limit' }}
         customInputProps={positivNumberProps}
         decorator={decorators.requiredDecorator()}
@@ -44,6 +43,8 @@ const NewColumnFormWrapper = ({ form, onSubmit }) => {
         decorator={decorators.requiredDecorator()}
         getFieldDecorator={getFieldDecorator}
       />
+
+      <FormItemSubmitButton buttonProps={{ loading }} />
     </Form>
   );
 };

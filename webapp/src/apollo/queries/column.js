@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 
 const allColumns = gql`
-  query allColumns($board_id: ID!) {
-    allColumns(board_id: $board_id) {
+  query allColumns($boardId: ID!) {
+    allColumns(boardId: $boardId) {
       id
       name
-      wip_limit
+      wipLimit
       position
       tickets {
         id
@@ -18,9 +18,10 @@ const allColumns = gql`
 
 
 const createColumn = gql`
-  mutation createColumn($name: String!, $wip_limit: Integer!, $position: Integer!, $board_id: ID!) {
-    createColumn(name: $name, wip_limit: $wip_limit, position: $position, board_id: $board_id) {
+  mutation createColumn($name: String!, $wipLimit: Int!, $position: Int!, $boardId: ID!) {
+    createColumn(name: $name, wipLimit: $wipLimit, position: $position, boardId: $boardId) {
       id
+      name
     }
   }
 `;

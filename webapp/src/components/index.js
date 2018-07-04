@@ -1,3 +1,5 @@
+import { GraphqlErrorNotification } from './Alerts';
+
 import AppLayout from './Layouts/App';
 
 import BoardTile from './Boards/BoardTile';
@@ -17,6 +19,10 @@ import {
 } from './FormItems';
 
 export {
+  // Alerts
+  GraphqlErrorNotification,
+
+  // App
   AppLayout,
 
   // Boards
