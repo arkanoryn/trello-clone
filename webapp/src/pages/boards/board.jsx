@@ -40,13 +40,13 @@ const breadcrumbItems = { 1: project, 2: { name: 'Boards' }, 3: board };
 const actions = (openModal) => {
   return (
     <Button
-          ghost
-          icon="plus"
-          onClick={() => { openModal(); }}
-          size="small"
+      ghost
+      icon="plus"
+      onClick={() => { openModal(); }}
+      size="small"
       type="primary"
     >
-            New column
+      New column
     </Button>
   );
 };

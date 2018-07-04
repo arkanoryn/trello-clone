@@ -16,7 +16,6 @@ const allColumns = gql`
   }
 `;
 
-
 const createColumn = gql`
   mutation createColumn($name: String!, $wipLimit: Int!, $position: Int!, $boardId: ID!) {
     createColumn(name: $name, wipLimit: $wipLimit, position: $position, boardId: $boardId) {
