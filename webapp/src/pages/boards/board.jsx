@@ -7,35 +7,9 @@ import { last } from 'lodash';
 import { AppLayout } from '../../components';
 import { newColumnActions, NewColumnModal, BoardView } from '../../features';
 
-// const { Meta } = Card;
-
 const project = { name: 'Alpha' };
 const board = { name: 'webapp' };
 const breadcrumbItems = { 1: project, 2: { name: 'Boards' }, 3: board };
-
-// const tickets = [
-//   { name: 'ticket 1', position: 1 },
-//   { name: 'ticket 2', position: 2 },
-//   { name: 'ticket 3', position: 3 },
-//   { name: 'ticket 4', position: 4 },
-// ];
-
-// const menu = (
-//   <Menu>
-//     <Menu.Item>
-//       <Icon type="export" /> move
-//     </Menu.Item>
-//     <Menu.Item>
-//       <Icon type="edit" /> edit
-//     </Menu.Item>
-//     <Menu.Item>
-//       <Icon type="user-add" /> change assignee
-//     </Menu.Item>
-//     <Menu.Item>
-//       <Icon type="delete" /> remove
-//     </Menu.Item>
-//   </Menu >
-// );
 
 const actions = (openModal) => {
   return (
