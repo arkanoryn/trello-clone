@@ -7,6 +7,9 @@ import {
 } from './NewColumn';
 import ProjectsList from './ProjectsList';
 import {
+  TicketFormModal,
+  ticketFormModalActions,
+  ticketFormModalReducer,
   TicketsList,
   TicketTile,
 } from './Tickets';
@@ -24,6 +27,9 @@ export {
 
   ProjectsList,
 
+  TicketFormModal,
+  ticketFormModalActions,
+  ticketFormModalReducer,
   TicketsList,
   TicketTile,
 };

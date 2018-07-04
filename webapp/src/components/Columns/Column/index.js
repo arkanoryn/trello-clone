@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Col,
   Dropdown,
@@ -8,18 +9,20 @@ import {
   Tooltip,
 } from 'antd';
 
+import { ticketFormModalActions } from '../../../features';
+
 const ADD_TICKET = 'Column/addTicket';
 const EDIT_COLUMN = 'Column/editColumn';
 const DELETE_COLUMN = 'Column/deleteColumn';
 
 const { Item: MenuItem } = Menu;
 
-const handleMenuClick = ({ key }, column) => {
+const handleMenuClick = ({ key }, column, actions) => {
   console.log('clicked menu of column:', column.id);
 
   switch (key) {
     case ADD_TICKET:
-      // open new ticket modal
+      actions.openModal();
       break;
 
     case EDIT_COLUMN:
@@ -36,10 +39,10 @@ const handleMenuClick = ({ key }, column) => {
   return true;
 };
 
-const menu = (column) => {
+const menu = (column, actions) => {
   return (
-    <Menu onClick={(args) => { return handleMenuClick(args, column); }}>
-      <MenuItem disabled key={ADD_TICKET}>
+    <Menu onClick={(args) => { return handleMenuClick(args, column, actions); }}>
+      <MenuItem key={ADD_TICKET}>
         <Icon type="plus" /> new ticket
       </MenuItem>
       <MenuItem disabled key={EDIT_COLUMN}>
@@ -52,7 +55,9 @@ const menu = (column) => {
   );
 };
 
-const Column = ({ column, children }) => {
+const Column = ({ column, children, openModal }) => {
+  const actions = { openModal };
+
   return (
     <li className="column-view">
       <div className="column-header">
@@ -68,7 +73,7 @@ const Column = ({ column, children }) => {
           </Col>
 
           <Col span={2}>
-            <Dropdown overlay={menu(column)}>
+            <Dropdown overlay={menu(column, actions)}>
               <span>
                 <Icon type="ellipsis" />
               </span>
@@ -82,4 +87,8 @@ const Column = ({ column, children }) => {
   );
 };
 
-export default Column;
+const mapDispatchToProps = {
+  openModal: ticketFormModalActions.open,
+};
+
+export default connect(null, mapDispatchToProps)(Column);

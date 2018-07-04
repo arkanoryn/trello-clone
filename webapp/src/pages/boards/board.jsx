@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { last } from 'lodash';
 
 import { AppLayout } from '../../components';
-import { newColumnActions, NewColumnModal, BoardView } from '../../features';
+import { newColumnActions, NewColumnModal, BoardView, TicketFormModal } from '../../features';
 
 const project = { name: 'Alpha' };
 const board = { name: 'webapp' };
@@ -39,9 +39,10 @@ const BoardPage = ({ location, openModal }) => {
 
   return (
     <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openModal)}>
-      <NewColumnModal boardId={boardId} />
-
       <BoardView boardId={boardId} />
+
+      <NewColumnModal boardId={boardId} />
+      <TicketFormModal />
     </AppLayout >
   );
 };

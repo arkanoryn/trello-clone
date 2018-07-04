@@ -1,14 +1,14 @@
-const OPEN_MODAL = 'NewColumnModal/open';
-const CLOSE_MODAL = 'NewColumnModal/close';
-const START_LOADING = 'NewColumnModal/startsLoading';
-const END_LOADING = 'NewColumnModal/endsLoading';
+const OPEN_MODAL = 'TicketFormModal/open';
+const CLOSE_MODAL = 'TicketFormModal/close';
+const START_LOADING = 'TicketFormModal/startsLoading';
+const END_LOADING = 'TicketFormModal/endsLoading';
 
 const initialState = {
   isOpen:    false,
   isLoading: false,
 };
 
-const newColumnReducer = (state = initialState, action) => {
+const ticketFormModalReducer = (state = initialState, action) => {
   switch (action.type) {
     case OPEN_MODAL:
       return ({
@@ -72,7 +72,7 @@ const endLoading = () => {
 };
 
 
-const newColumnActions = {
+const ticketFormModalActions = {
   close,
   open,
   startLoading,
@@ -80,4 +80,7 @@ const newColumnActions = {
 };
 
 // export default newColumnReducer;
-export { newColumnActions, newColumnReducer };
+export {
+  ticketFormModalActions,
+  ticketFormModalReducer,
+};
