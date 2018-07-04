@@ -10,10 +10,11 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
+alias TrelloCloneApi.Factory
 alias TrelloCloneApi.Accounts.User
-alias TrelloCloneApi.Organization.Project
-alias TrelloCloneApi.Project.Board
 alias TrelloCloneApi.Repo
+
+{:ok, _} = Application.ensure_all_started(:ex_machina)
 
 users = [
   %User{username: "John Doe", email: "john@doe.com", password: "1234567890"},
@@ -22,65 +23,29 @@ users = [
 
 Enum.map(users, fn user -> Repo.insert!(user) end)
 
-projects = [
-  %Project{
-    name: "Project Alpha",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities."
-  },
-  %Project{
-    name: "Project Omega",
-    description:
-      "President Trump returned to his tough talk and called for changes in immigration laws a day after he retreated from his hard-line position of separating immigrant children from their families."
-  },
-  %Project{
-    name: "Project Alpha 1",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities."
-  },
-  %Project{
-    name: "Project Omega 2",
-    description:
-      "President Trump returned to his tough talk and called for changes in immigration laws a day after he retreated from his hard-line position of separating immigrant children from their families."
-  },
-  %Project{
-    name: "Project Alpha 3",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities."
-  },
-  %Project{
-    name: "Project Omega 3",
-    description:
-      "President Trump returned to his tough talk and called for changes in immigration laws a day after he retreated from his hard-line position of separating immigrant children from their families."
-  },
-  %Project{
-    name: "Project Alpha 4",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities."
-  },
-  %Project{
-    name: "Project Omega 4",
-    description:
-      "President Trump returned to his tough talk and called for changes in immigration laws a day after he retreated from his hard-line position of separating immigrant children from their families."
-  }
-]
+project = Factory.project_factory() |> Repo.insert!()
+Enum.each(1..10, fn _ -> Factory.project_factory() |> Repo.insert!() end)
 
-saved_projects = Enum.map(projects, fn project -> Repo.insert!(project) end)
-first_project = List.first(saved_projects)
+board = Factory.board_factory() |> Map.put(:project, project) |> Repo.insert!()
 
-boards = [
-  %Board{
-    name: "First board",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities.",
-    project_id: first_project.id
-  },
-  %Board{
-    name: "Second board",
-    description:
-      "Private contractors, some of them ex-military, have received millions in federal contracts for detention centers and tent cities.",
-    project_id: first_project.id
-  }
-]
+Enum.each(1..7, fn _ ->
+  Factory.board_factory() |> Map.put(:project, project) |> Repo.insert!()
+end)
 
-Enum.map(boards, fn board -> Repo.insert!(board) end)
+column =
+  Factory.column_factory()
+  |> Map.put(:board, board)
+  |> (fn col -> %{col | position: 0} end).()
+  |> Repo.insert!()
+
+Enum.each(1..2, fn _ ->
+  Factory.column_factory()
+  |> Map.put(:board, board)
+  |> Repo.insert!()
+end)
+
+Enum.each(1..6, fn _ ->
+  Factory.ticket_factory()
+  |> Map.put(:column, column)
+  |> Repo.insert!()
+end)

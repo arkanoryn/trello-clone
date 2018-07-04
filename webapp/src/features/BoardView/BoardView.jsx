@@ -21,7 +21,7 @@ const BoardView = ({ data: { allColumns } }) => {
             sortedColumns,
             (column) => {
               return (
-                <Column {...column} key={`column_${column.name}`}>
+                <Column {...column} key={`column_${column.id}`}>
                   {
                     map(
                       sortBy(column.tickets, (col) => { return (col.columnPosition); }),
