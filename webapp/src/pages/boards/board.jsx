@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { graphql } from 'react-apollo';
 import { compose, withHandlers } from 'recompose';
 import { Button, notification } from 'antd';
-import { last } from 'lodash';
+import { last, isEmpty } from 'lodash';
 
 import { ticketQueries } from '../../apollo/queries';
 import { AppLayout, GraphqlErrorNotification } from '../../components';
@@ -29,12 +29,12 @@ const actions = (openModal) => {
 };
 
 const handleCreateTicket = ({
-  closeTicketFormModal, mutate, startLoading, endLoading,
+  closeTicketFormModal, createTicketMutation, startLoading, endLoading,
 }) => {
   return (variables) => {
     startLoading();
 
-    return mutate({
+    return createTicketMutation({
       variables,
       refetchQueries: [{ query: ticketQueries.allColumnTickets, variables: { columnId: variables.columnId } }],
     })
@@ -52,13 +52,13 @@ const handleCreateTicket = ({
 };
 
 const handleUpdateTicket = ({
-  closeTicketFormModal, mutate, startLoading, endLoading,
+  closeTicketFormModal, updateTicketMutation, startLoading, endLoading,
 }) => {
   return (variables) => {
     startLoading();
 
-    return mutate({
-      variables,
+    return updateTicketMutation({
+      variables:      ticketQueries.buildUpdateTicketVariables(variables),
       refetchQueries: [{ query: ticketQueries.allColumnTickets, variables: { columnId: variables.columnId } }],
     })
       .then(({ data: { updateTicket } }) => {
@@ -82,10 +82,12 @@ const getBoardIdFromLocation = ({ pathname }) => {
   return parseInt(id, 0);
 };
 
-const BoardPage = ({ location, openColumnModal, createTicket }) => {
+const BoardPage = ({
+  location, openColumnModal, createTicket, ticket, updateTicket,
+}) => {
   // const sortedColumns = sortBy(columns, (col) => { return col.position; });
   const boardId = getBoardIdFromLocation(location);
-  const handleOnSubmit = createTicket;
+  const handleOnSubmit = isEmpty(ticket) ? createTicket : updateTicket;
 
   return (
     <AppLayout breadcrumbItems={breadcrumbItems} actions={actions(openColumnModal)}>
@@ -97,6 +99,12 @@ const BoardPage = ({ location, openColumnModal, createTicket }) => {
   );
 };
 
+const mapStateToProps = ({ tickets: { ticketFormModal } }) => {
+  return ({
+    ticket: ticketFormModal.ticket,
+  });
+};
+
 const mapDispatchToProps = {
   openColumnModal:      newColumnActions.open,
   startLoading:         ticketFormModalActions.startLoading,
@@ -105,9 +113,9 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  graphql(ticketQueries.createTicket),
-  graphql(ticketQueries.updateTicket),
-  connect(null, mapDispatchToProps),
+  graphql(ticketQueries.createTicket, { name: 'createTicketMutation' }),
+  graphql(ticketQueries.updateTicket, { name: 'updateTicketMutation' }),
+  connect(mapStateToProps, mapDispatchToProps),
   withRouter,
   withHandlers({
     createTicket: handleCreateTicket,

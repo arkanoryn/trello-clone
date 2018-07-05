@@ -45,7 +45,6 @@ const TicketFormWrapper = ({ form, onSubmit, loading }) => {
       <FormItemInput
         id="tags"
         customFormItemProps={{ label: 'Tags' }}
-        decorator={decorators.requiredDecorator()}
         getFieldDecorator={getFieldDecorator}
       />
 

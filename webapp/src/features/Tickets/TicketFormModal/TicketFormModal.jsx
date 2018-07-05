@@ -21,7 +21,11 @@ const TicketFormModal = ({
       <TicketForm
         ticket={ticket}
         ticketsCount={ticketsCount}
-        onSubmit={(values) => { return (onSubmit({ ...values, boardId, columnId })); }}
+        onSubmit={(values) => {
+          return (onSubmit({
+            ...values, boardId, columnId, id: ticket.id,
+          }));
+        }}
       />
     </Modal>
   );
